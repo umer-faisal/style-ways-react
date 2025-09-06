@@ -1,7 +1,7 @@
 import ClientLayout from "./client-layout"
 
 export const metadata = {
-  title: "ShopHub - Your Online Store",
+  title: "zenify - Ecommerce App",
   description: "Discover amazing products at great prices",
   generator: "v0.app",
 }

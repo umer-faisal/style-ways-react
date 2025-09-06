@@ -31,7 +31,7 @@ export default function Header() {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="#" className="group text-white text-sm font-medium transition-colors inline-block">
+            <Link href="/" className="group text-white text-sm font-medium transition-colors inline-block">
               Home
               <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
             </Link>
@@ -78,10 +78,10 @@ export default function Header() {
       {/* Mobile nav panel */}
       <div className={`md:hidden ${mobileOpen ? "block" : "hidden"}`}>
         <nav className="flex flex-col bg-black text-white border-t">
-          <Link href="/products" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
+          <Link href="/" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
             Home
           </Link>
-          <a href="#" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
+          <a href="/products" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
             Shop
           </a>
           <a href="#" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
