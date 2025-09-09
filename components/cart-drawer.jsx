@@ -20,8 +20,8 @@ export default function CartDrawer() {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <ShoppingCart className="h-5 w-5" />
+        <Button variant="ghost" size="icon" className="relative cursor-pointer">
+          <ShoppingCart className="h-5 w-5 " />
           {itemCount > 0 && (
             <Badge
               variant="secondary"
@@ -68,7 +68,7 @@ export default function CartDrawer() {
 
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-medium text-foreground truncate">{item.name}</h4>
-                        <p className="text-sm text-muted-foreground">${item.price.toFixed(2)} each</p>
+                        <p className="text-sm text-muted-foreground">Rs{Number(item.price ?? 0).toFixed(2)} each</p>
 
                         <div className="flex items-center space-x-2 mt-2">
                           <Button
@@ -102,7 +102,7 @@ export default function CartDrawer() {
                         >
                           <X className="h-4 w-4" />
                         </Button>
-                        <p className="text-sm font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-sm font-semibold">${(Number(item.price ?? 0) * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -113,7 +113,7 @@ export default function CartDrawer() {
               <div className="border-t pt-4 space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-base font-medium">Subtotal:</span>
-                  <span className="text-lg font-bold">${total.toFixed(2)}</span>
+                  <span className="text-lg font-bold">${Number(total ?? 0).toFixed(2)}</span>
                 </div>
 
                 <Separator />

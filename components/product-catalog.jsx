@@ -13,34 +13,34 @@ import Link from "next/link"
 const allProducts = [
   {
     id: 1,
-    name: "Wireless Headphones",
-    price: 99.99,
-    originalPrice: 129.99,
-    image: "/wireless-headphones.png",
+    name: "Blue Drop-Shoulder ",
+    price: 1499,
+    originalPrice: 1800,
+    image: "/blue-dropshoulder/front.png",
     rating: 4.5,
-    reviews: 128,
-    category: "Electronics",
+    reviews: 10,
+    category: "Drop-Shoulder",
     inStock: true,
-    description: "Premium wireless headphones with noise cancellation",
+    description: "Crafted from soft cotton, this blue tee features a relaxed drop shoulder fit and an printed design on the front for a subtle artistic touch.",
   },
   {
     id: 2,
-    name: "Smart Watch",
-    price: 199.99,
-    originalPrice: 249.99,
-    image: "/smartwatch-lifestyle.png",
+    name: "Beige Drop-Shoulder",
+    price: 1499,
+    originalPrice: 1800,
+    image: "/biege-dropshoulder/front.png",
     rating: 4.8,
-    reviews: 89,
-    category: "Electronics",
+    reviews: 9,
+    category: "Drop-Shoulder",
     inStock: true,
     description: "Advanced fitness tracking and smart notifications",
   },
   {
     id: 3,
-    name: "Laptop Backpack",
-    price: 49.99,
-    originalPrice: 69.99,
-    image: "/laptop-backpack.png",
+    name: "black-tee ",
+    price: "1250",
+    originalPrice: 1499,
+    image: "/black-tee/front.png",
     rating: 4.3,
     reviews: 156,
     category: "Accessories",
@@ -109,7 +109,7 @@ const allProducts = [
   },
 ]
 
-const categories = ["All", "Electronics", "Accessories", "Fitness", "Home", "Fashion"]
+const categories = ["All", "Drop-Shoulder", "Tees", "Accessories"]
 
 export default function ProductCatalog() {
   const { addItem } = useCart()

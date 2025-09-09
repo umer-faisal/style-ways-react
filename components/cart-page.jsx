@@ -69,7 +69,7 @@ export default function CartPage() {
 
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-semibold text-foreground mb-1">{item.name}</h3>
-                      <p className="text-muted-foreground mb-3">${item.price.toFixed(2)} each</p>
+                      <p className="text-muted-foreground mb-3">${Number(item.price).toFixed(2)} each</p>
 
                       <div className="flex items-center space-x-3">
                         <span className="text-sm font-medium">Quantity:</span>
@@ -99,7 +99,7 @@ export default function CartPage() {
                       >
                         <X className="h-5 w-5" />
                       </Button>
-                      <p className="text-xl font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-xl font-bold">${(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
                     </div>
                   </div>
                 </CardContent>

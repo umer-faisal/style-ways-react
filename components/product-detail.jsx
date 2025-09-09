@@ -5,7 +5,7 @@ import { useCart } from "../contexts/cart-context"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
 import { Card, CardContent } from "./ui/card"
-import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Truck, Shield, RotateCcw } from "lucide-react"
+import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Truck, Shield, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 
 // Mock product data - in a real app this would come from an API
@@ -13,7 +13,7 @@ const getProductById = (id) => {
   const products = [
     {
       id: 1,
-      name: "Wireless Headphones",
+      name: "DROP SHOULDER EMBROIDERED TEE",
       price: 99.99,
       originalPrice: 129.99,
       images: ["/wireless-headphones.png"],
@@ -41,6 +41,30 @@ const getProductById = (id) => {
         Battery: "30 hours playback",
       },
     },
+    {
+    id: 2,
+    name: "Beige Drop-Shoulder",
+    price: 1499,
+    originalPrice: 1800,
+    images: ["/biege-dropshoulder/front.png", "/biege-dropshoulder/back.png"],
+    rating: 4.8,
+    reviews: 9,
+    category: "Drop-Shoulder",
+    inStock: true,
+    description: "Advanced fitness tracking and smart notifications",
+  },
+  {
+    id: 3,
+    name: "black-tee ",
+    price: "1250",
+    originalPrice: 1499,
+    images: ["/black-tee/front.png", "/black-tee/back.png"],
+    rating: 4.3,
+    reviews: 156,
+    category: "Accessories",
+    inStock: true,
+    description: "Durable laptop backpack with multiple compartments",
+  },
   ]
 
   return products.find((p) => p.id === Number.parseInt(id)) || products[0]
@@ -54,8 +78,16 @@ export default function ProductDetail({ productId }) {
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
 
+  // Normalize product data and provide safe defaults
+  const images = Array.isArray(product.images) ? product.images : product.image ? [product.image] : []
+  const priceNum = Number(product.price ?? 0)
+  const originalPriceNum = Number(product.originalPrice ?? priceNum)
+  const features = product.features ?? []
+  const specifications = product.specifications ?? {}
+  const stockCount = Number(product.stockCount ?? 0)
+
   const handleQuantityChange = (change) => {
-    setQuantity((prev) => Math.max(1, Math.min(product.stockCount, prev + change)))
+    setQuantity((prev) => Math.max(1, Math.min(stockCount || Infinity, prev + change)))
   }
 
   const handleAddToCart = async () => {
@@ -69,9 +101,7 @@ export default function ProductDetail({ productId }) {
   }
 
   const discountPercentage =
-    product.originalPrice > product.price
-      ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-      : 0
+    originalPriceNum > priceNum ? Math.round(((originalPriceNum - priceNum) / originalPriceNum) * 100) : 0
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -91,19 +121,39 @@ export default function ProductDetail({ productId }) {
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Product Images */}
+        {/* Product Images (carousel) */}
         <div className="space-y-4">
-          <div className="aspect-square overflow-hidden rounded-lg bg-card">
+          <div className="relative aspect-square overflow-hidden rounded-lg bg-card">
             <img
-              src={product.images[selectedImage] || "/placeholder.svg"}
+              src={images[selectedImage] || "/placeholder.svg"}
               alt={product.name}
               className="w-full h-full object-cover"
             />
+
+            {images.length > 1 && (
+              <>
+                <button
+                  aria-label="Previous image"
+                  onClick={() => setSelectedImage((s) => (s - 1 + images.length) % images.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-foreground rounded-full p-2 shadow-md"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+
+                <button
+                  aria-label="Next image"
+                  onClick={() => setSelectedImage((s) => (s + 1) % images.length)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-foreground rounded-full p-2 shadow-md"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </>
+            )}
           </div>
 
-          {product.images.length > 1 && (
+          {images.length > 1 && (
             <div className="flex space-x-2">
-              {product.images.map((image, index) => (
+              {images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -111,11 +161,7 @@ export default function ProductDetail({ productId }) {
                     selectedImage === index ? "border-primary" : "border-border"
                   }`}
                 >
-                  <img
-                    src={image || "/placeholder.svg"}
-                    alt={`${product.name} ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={image || "/placeholder.svg"} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -149,10 +195,10 @@ export default function ProductDetail({ productId }) {
 
             {/* Price */}
             <div className="flex items-center space-x-3 mb-4">
-              <span className="text-3xl font-bold text-foreground">${product.price}</span>
+              <span className="text-3xl font-bold text-foreground">${priceNum.toFixed(2)}</span>
               {discountPercentage > 0 && (
                 <>
-                  <span className="text-xl text-muted-foreground line-through">${product.originalPrice}</span>
+                  <span className="text-xl text-muted-foreground line-through">${originalPriceNum.toFixed(2)}</span>
                   <Badge variant="secondary" className="bg-accent text-accent-foreground">
                     {discountPercentage}% OFF
                   </Badge>
@@ -189,7 +235,7 @@ export default function ProductDetail({ productId }) {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleQuantityChange(1)}
-                  disabled={quantity >= product.stockCount}
+                  disabled={stockCount ? quantity >= stockCount : false}
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -199,7 +245,7 @@ export default function ProductDetail({ productId }) {
             <div className="flex space-x-3">
               <Button className="flex-1" size="lg" disabled={!product.inStock || isAdding} onClick={handleAddToCart}>
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                {isAdding ? "Adding..." : `Add to Cart - $${(product.price * quantity).toFixed(2)}`}
+                {isAdding ? "Adding..." : `Add to Cart - $${(priceNum * quantity).toFixed(2)}`}
               </Button>
               <Button variant="outline" size="lg" onClick={() => setIsWishlisted(!isWishlisted)}>
                 <Heart className={`h-5 w-5 ${isWishlisted ? "fill-current text-red-500" : ""}`} />
@@ -214,7 +260,7 @@ export default function ProductDetail({ productId }) {
           <div>
             <h3 className="font-semibold text-foreground mb-3">Key Features</h3>
             <ul className="space-y-2">
-              {product.features.map((feature, index) => (
+              {features.map((feature, index) => (
                 <li key={index} className="flex items-center space-x-2">
                   <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
                   <span className="text-sm text-muted-foreground">{feature}</span>
@@ -275,7 +321,7 @@ export default function ProductDetail({ productId }) {
             <div className="mt-8">
               <h4 className="font-semibold text-foreground mb-4">Specifications</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(product.specifications).map(([key, value]) => (
+                {Object.entries(specifications).map(([key, value]) => (
                   <div key={key} className="flex justify-between py-2 border-b border-border">
                     <span className="font-medium text-foreground">{key}</span>
                     <span className="text-muted-foreground">{value}</span>

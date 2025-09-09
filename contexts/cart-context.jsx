@@ -53,19 +53,31 @@ const cartReducer = (state, action) => {
 }
 
 export function CartProvider({ children }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] })
+  const [state, dispatch] = useReducer(
+    cartReducer,
+    undefined,
+    () => {
+      try {
+        if (typeof window === "undefined") return { items: [] }
+        const primary = localStorage.getItem("shopping-cart")
+        const legacy = localStorage.getItem("cart_items")
+        const parsed = primary ? JSON.parse(primary) : legacy ? JSON.parse(legacy) : []
+        return { items: parsed }
+      } catch (e) {
+        return { items: [] }
+      }
+    },
+  )
 
-  // Load cart from localStorage on mount
+  // Save cart to localStorage whenever it changes (write both primary and legacy keys)
   useEffect(() => {
-    const savedCart = localStorage.getItem("shopping-cart")
-    if (savedCart) {
-      dispatch({ type: "LOAD_CART", payload: JSON.parse(savedCart) })
+    try {
+      const serialized = JSON.stringify(state.items)
+      localStorage.setItem("shopping-cart", serialized)
+      localStorage.setItem("cart_items", serialized)
+    } catch (e) {
+      // ignore write errors
     }
-  }, [])
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("shopping-cart", JSON.stringify(state.items))
   }, [state.items])
 
   const addItem = (product, quantity = 1) => {

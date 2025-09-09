@@ -11,10 +11,12 @@ import { Separator } from "./ui/separator"
 import { Badge } from "./ui/badge"
 import { ArrowLeft, ArrowRight, CreditCard, Truck, Shield, CheckCircle, MapPin, Mail, Phone } from "lucide-react"
 import { useRouter } from "next/navigation"
+import emailjs from "emailjs-com"
+
+
 
 const CHECKOUT_STEPS = [
 	{ id: "shipping", title: "Shipping Information", icon: Truck },
-	{ id: "payment", title: "Payment Method", icon: CreditCard },
 	{ id: "review", title: "Review Order", icon: CheckCircle },
 ]
 
@@ -104,7 +106,6 @@ export default function CheckoutPage() {
 
 	const handleNext = () => {
 		if (currentStep === 0 && !validateShipping()) return
-		if (currentStep === 1 && !validatePayment()) return
 
 		if (currentStep < CHECKOUT_STEPS.length - 1) {
 			setCurrentStep(currentStep + 1)
@@ -120,11 +121,37 @@ export default function CheckoutPage() {
 	const handlePlaceOrder = async () => {
 		setIsProcessing(true)
 
-		// Simulate order processing
-		setTimeout(() => {
+		const templateParams = {
+			firstName: shippingInfo.firstName,
+			lastName: shippingInfo.lastName,
+			email: shippingInfo.email,
+			phone: shippingInfo.phone,
+			address: shippingInfo.address,
+			city: shippingInfo.city,
+			state: shippingInfo.state,
+			zipCode: shippingInfo.zipCode,
+			country: shippingInfo.country,
+			orderItems: items
+				.map((item) => `${item.name} (x${item.quantity}) - $${(Number(item.price) * Number(item.quantity)).toFixed(2)}`)
+				.join("\n"),
+			total: total.toFixed(2),
+		}
+
+		try {
+			await emailjs.send(
+				"service_u4jhvh1",
+				"template_ujrlhxg",
+				templateParams,
+				"ohfUSmK4hi0wqY3U5"
+			)
+
 			clearCart()
 			router.push("/checkout/success")
-		}, 2000)
+		} catch (error) {
+			console.error("EmailJS error:", error)
+			alert("Failed to send order confirmation. Please try again.")
+			setIsProcessing(false)
+		}
 	}
 
 	const handleShippingChange = (field, value) => {
@@ -309,104 +336,8 @@ export default function CheckoutPage() {
 							</Card>
 						)}
 
-						{/* Payment Method */}
-						{currentStep === 1 && (
-							<Card>
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<CreditCard className="h-5 w-5" />
-										Payment Method
-									</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-6">
-									<div className="flex items-center space-x-2 p-4 border rounded-lg">
-										<input
-											type="radio"
-											id="card"
-											name="paymentMethod"
-											value="card"
-											checked={paymentInfo.method === "card"}
-											onChange={() => handlePaymentChange("method", "card")}
-											className="accent-primary"
-										/>
-										<Label htmlFor="card" className="flex-1 cursor-pointer">
-											<div className="flex items-center gap-2">
-												<CreditCard className="h-4 w-4" />
-												Credit/Debit Card
-											</div>
-										</Label>
-									</div>
-
-									{paymentInfo.method === "card" && (
-										<div className="space-y-4 p-4 border rounded-lg bg-muted/20">
-											<div>
-												<Label htmlFor="cardName">Cardholder Name</Label>
-												<Input
-													id="cardName"
-													value={paymentInfo.cardName}
-													onChange={(e) => handlePaymentChange("cardName", e.target.value)}
-													className={errors.cardName ? "border-destructive" : ""}
-												/>
-												{errors.cardName && <p className="text-sm text-destructive mt-1">{errors.cardName}</p>}
-											</div>
-
-											<div>
-												<Label htmlFor="cardNumber">Card Number</Label>
-												<Input
-													id="cardNumber"
-													placeholder="1234 5678 9012 3456"
-													value={paymentInfo.cardNumber}
-													onChange={(e) => handlePaymentChange("cardNumber", e.target.value)}
-													className={errors.cardNumber ? "border-destructive" : ""}
-												/>
-												{errors.cardNumber && <p className="text-sm text-destructive mt-1">{errors.cardNumber}</p>}
-											</div>
-
-											<div className="grid grid-cols-2 gap-4">
-												<div>
-													<Label htmlFor="expiryDate">Expiry Date</Label>
-													<Input
-														id="expiryDate"
-														placeholder="MM/YY"
-														value={paymentInfo.expiryDate}
-														onChange={(e) => handlePaymentChange("expiryDate", e.target.value)}
-														className={errors.expiryDate ? "border-destructive" : ""}
-													/>
-													{errors.expiryDate && <p className="text-sm text-destructive mt-1">{errors.expiryDate}</p>}
-												</div>
-												<div>
-													<Label htmlFor="cvv">CVV</Label>
-													<Input
-														id="cvv"
-														placeholder="123"
-														value={paymentInfo.cvv}
-														onChange={(e) => handlePaymentChange("cvv", e.target.value)}
-														className={errors.cvv ? "border-destructive" : ""}
-													/>
-													{errors.cvv && <p className="text-sm text-destructive mt-1">{errors.cvv}</p>}
-												</div>
-											</div>
-										</div>
-									)}
-
-									<div className="flex items-center space-x-2">
-										<input
-											type="checkbox"
-											id="sameAsBilling"
-											checked={billingInfo.sameAsShipping}
-											onChange={(e) => setBillingInfo((prev) => ({ ...prev, sameAsShipping: e.target.checked }))}
-											className="accent-primary"
-										/>
-										<Label htmlFor="sameAsBilling" className="text-sm">
-											Billing address is the same as shipping address
-										</Label>
-									</div>
-								</CardContent>
-							</Card>
-						)}
-
 						{/* Review Order */}
-						{currentStep === 2 && (
+						{currentStep === 1 && (
 							<div className="space-y-6">
 								<Card>
 									<CardHeader>
@@ -430,7 +361,7 @@ export default function CheckoutPage() {
 									</CardContent>
 								</Card>
 
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div className="grid grid-cols-1 md:grid-cols-1 gap-6">
 									<Card>
 										<CardHeader>
 											<CardTitle className="text-lg">Shipping Address</CardTitle>
@@ -438,19 +369,19 @@ export default function CheckoutPage() {
 										<CardContent>
 											<div className="text-sm space-y-1">
 												<p className="font-medium">
-													{shippingInfo.firstName} {shippingInfo.lastName}
+												  FIRST NAME: {shippingInfo.firstName} <br />LAST NAME: {shippingInfo.lastName}
 												</p>
-												<p>{shippingInfo.address}</p>
-												<p>
-													{shippingInfo.city}, {shippingInfo.state} {shippingInfo.zipCode}
+												<p className="font-medium">ADDRESS: {shippingInfo.address}</p>
+												<p className="font-medium">
+												   CITY: {shippingInfo.city}, <br />STATE: {shippingInfo.state} <br />ZIPCODE: {shippingInfo.zipCode}
 												</p>
-												<p>{shippingInfo.email}</p>
-												<p>{shippingInfo.phone}</p>
+												<p className="font-medium">EMAIL: {shippingInfo.email}</p><br />
+												<p className="font-medium">PHONE: {shippingInfo.phone}</p>
 											</div>
 										</CardContent>
 									</Card>
 
-									<Card>
+									{/* <Card>
 										<CardHeader>
 											<CardTitle className="text-lg">Payment Method</CardTitle>
 										</CardHeader>
@@ -461,7 +392,7 @@ export default function CheckoutPage() {
 												<p>{paymentInfo.cardName}</p>
 											</div>
 										</CardContent>
-									</Card>
+									</Card> */}
 								</div>
 							</div>
 						)}
@@ -496,7 +427,7 @@ export default function CheckoutPage() {
 								<div className="space-y-2">
 									<div className="flex justify-between">
 										<span>Subtotal ({itemCount} items)</span>
-										<span>${subtotal.toFixed(2)}</span>
+										<span>Rs{subtotal.toFixed(2)}</span>
 									</div>
 
 									<div className="flex justify-between">
@@ -521,7 +452,7 @@ export default function CheckoutPage() {
 
 								<div className="flex justify-between text-lg font-bold">
 									<span>Total</span>
-									<span>${total.toFixed(2)}</span>
+									<span>Rs{total.toFixed(2)}</span>
 								</div>
 
 								<div className="space-y-2 pt-4">

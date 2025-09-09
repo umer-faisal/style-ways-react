@@ -1,9 +1,9 @@
 import ClientLayout from "./client-layout"
 
 export const metadata = {
-  title: "zenify - Ecommerce App",
+  title: "StyleWays",
   description: "Discover amazing products at great prices",
-  generator: "v0.app",
+  icons: { icon: "/favicon.png", className: "h-32 w-32" }
 }
 
 export default function RootLayout({ children }) {

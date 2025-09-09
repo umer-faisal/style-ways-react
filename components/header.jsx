@@ -16,7 +16,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <img src="/logo.webp" alt="ShopHub Logo" className="h-12 w-auto md:h-16" />
+              <img src="/logo/final-logo.png" alt="StyleWays Logo" className="h-16 w-auto md:h-20 cursor-pointer" />
               {/* <h1 className="text-2xl font-bold text-primary cursor-pointer">ShopHub</h1> */}
             </Link>
           </div>
@@ -56,7 +56,7 @@ export default function Header() {
               {/* <Search className="h-5 w-5 text-white" /> */}
             </Button>
 
-            <UserDropdown />
+            {/* <UserDropdown /> */}
 
             <CartDrawer />
 
