@@ -10,28 +10,28 @@ import { useState } from "react"
 const featuredProducts = [
   {
     id: 1,
-    name: "Wireless Headphones",
-    price: 99.99,
-    originalPrice: 129.99,
-    image: "/wireless-headphones.png",
+    name: "Blue Drop-Shoulder",
+    price: 1499,
+    originalPrice: 1800,
+    image: "/blue-dropshoulder/front.png",
     rating: 4.5,
-    reviews: 128,
+    reviews: 10,
   },
   {
     id: 2,
-    name: "Smart Watch",
-    price: 199.99,
-    originalPrice: 249.99,
-    image: "/smartwatch-lifestyle.png",
+    name: "Beige Drop-Shoulder",
+    price: 1999,
+    originalPrice: 2499,
+    image: "/biege-dropshoulder/front.png",
     rating: 4.8,
-    reviews: 89,
+    reviews: 9,
   },
   {
     id: 3,
-    name: "Laptop Backpack",
-    price: 49.99,
+    name: "black-tee",
+    price: 1250,
     originalPrice: 69.99,
-    image: "/laptop-backpack.png",
+    image: "/black-tee/front.png",
     rating: 4.3,
     reviews: 156,
   },
@@ -110,8 +110,8 @@ export default function FeaturedProducts() {
 
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <span className="text-lg font-bold text-foreground">${product.price}</span>
-                      <span className="text-sm text-muted-foreground line-through">${product.originalPrice}</span>
+                      <span className="text-lg font-bold text-foreground">Rs {product.price}</span>
+                      <span className="text-sm text-muted-foreground line-through">Rs {product.originalPrice}</span>
                     </div>
                   </div>
 

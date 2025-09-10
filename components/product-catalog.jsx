@@ -43,7 +43,7 @@ const allProducts = [
     image: "/black-tee/front.png",
     rating: 4.3,
     reviews: 156,
-    category: "Accessories",
+    category: "Tees",
     inStock: true,
     description: "Durable laptop backpack with multiple compartments",
   },
