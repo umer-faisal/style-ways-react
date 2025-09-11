@@ -253,7 +253,7 @@ export default function CheckoutPage() {
 					<div className="lg:col-span-2">
 						{/* Shipping Information */}
 						{currentStep === 0 && (
-							<Card>
+							<Card className="pt-6 pb-6">
 								<CardHeader>
 									<CardTitle className="flex items-center gap-2">
 										<Truck className="h-5 w-5" />
@@ -367,7 +367,7 @@ export default function CheckoutPage() {
 						{/* Review Order */}
 						{currentStep === 1 && (
 							<div className="space-y-6">
-								<Card>
+								<Card className="!pt-6 !pb-6">
 									<CardHeader>
 										<CardTitle>Review Your Order</CardTitle>
 									</CardHeader>
@@ -386,7 +386,7 @@ export default function CheckoutPage() {
 														Qty: {item.quantity}
 													</p>
 												</div>
-												<p className="font-semibold">${(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
+												<p className="font-semibold">Rs {(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
 											</div>
 										))}
 									</CardContent>
@@ -450,7 +450,7 @@ export default function CheckoutPage() {
 
 					{/* Order Summary */}
 					<div className="lg:col-span-1">
-						<Card className="sticky top-24">
+						<Card className="sticky top-24 pt-6 pb-4">
 							<CardHeader>
 								<CardTitle>Order Summary</CardTitle>
 							</CardHeader>
@@ -470,12 +470,12 @@ export default function CheckoutPage() {
 												</Badge>
 											)}
 										</span>
-										<span>${shipping.toFixed(2)}</span>
+										<span>Rs {shipping.toFixed(2)}</span>
 									</div>
 
 									<div className="flex justify-between">
 										<span>Tax</span>
-										<span>${tax.toFixed(2)}</span>
+										<span>Rs {tax.toFixed(2)}</span>
 									</div>
 								</div>
 

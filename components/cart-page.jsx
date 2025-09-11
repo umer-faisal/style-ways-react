@@ -17,6 +17,12 @@ export default function CartPage() {
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax
 
+  // helper: format price and strip unnecessary ".00"
+  const formatPrice = (value) => {
+    const num = Number(value) || 0
+    return num % 1 === 0 ? String(num) : num.toFixed(2).replace(/\.?0+$/, "")
+  }
+
   if (items.length === 0) {
     return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -69,7 +75,7 @@ export default function CartPage() {
 
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-semibold text-foreground mb-1">{item.name}</h3>
-                      <p className="text-muted-foreground mb-3">Rs {Number(item.price).toFixed(2)} each</p>
+                      <p className="text-muted-foreground mb-3">Rs {formatPrice(item.price)} each</p>
 
                       <div className="flex items-center space-x-3">
                         <span className="text-sm font-medium">Quantity:</span>
@@ -101,7 +107,7 @@ export default function CartPage() {
                       >
                         <X className="h-5 w-5" />
                       </Button>
-                      <p className="text-xl font-bold">Rs {(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
+                      <p className="text-xl font-bold">Rs {formatPrice(Number(item.price) * Number(item.quantity))}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -129,7 +135,7 @@ export default function CartPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal ({itemCount} items)</span>
-                  <span>Rs {subtotal.toFixed(2)}</span>
+                  <span>Rs {formatPrice(subtotal)}</span>
                 </div>
 
                 <div className="flex justify-between">
@@ -141,12 +147,12 @@ export default function CartPage() {
                       </Badge>
                     )}
                   </span>
-                  <span>Rs {shipping.toFixed(2)}</span>
+                  <span>Rs {formatPrice(shipping)}</span>
                 </div>
 
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>Rs {tax.toFixed(2)}</span>
+                  <span>Rs {formatPrice(tax)}</span>
                 </div>
               </div>
 
@@ -154,14 +160,14 @@ export default function CartPage() {
 
               <div className="flex justify-between text-lg font-bold">
                 <span>Total</span>
-                <span>Rs {total.toFixed(2)}</span>
+                <span>Rs {formatPrice(total)}</span>
               </div>
 
               {shipping > 0 && (
                 <div className="bg-muted p-3 rounded-lg">
                   <div className="flex items-center gap-2 text-sm">
                     <Truck className="h-4 w-4" />
-                    <span>Add Rs {(50 - subtotal).toFixed(2)} more for free shipping</span>
+                    <span>Add Rs {formatPrice(50 - subtotal)} more for free shipping</span>
                   </div>
                 </div>
               )}
