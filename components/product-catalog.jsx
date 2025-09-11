@@ -156,8 +156,8 @@ export default function ProductCatalog() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">All Products</h1>
-        <p className="text-muted-foreground">Discover our complete collection of quality products</p>
+        <h1 className="text-3xl font-bold text-[#000000] mb-2">All Products</h1>
+        <p className="text-[#333333]">Discover our complete collection of quality products</p>
       </div>
 
       {/* Search and Filters */}
@@ -218,7 +218,7 @@ export default function ProductCatalog() {
 
       {/* Results Count */}
       <div className="mb-6">
-        <p className="text-muted-foreground">
+        <p className="text-[#333333]">
           Showing {sortedProducts.length} of {allProducts.length} products
         </p>
       </div>
@@ -275,9 +275,9 @@ export default function ProductCatalog() {
 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-foreground">${product.price}</span>
+                    <span className="text-lg font-bold text-foreground">Rs {product.price}</span>
                     {product.originalPrice > product.price && (
-                      <span className="text-sm text-muted-foreground line-through">${product.originalPrice}</span>
+                      <span className="text-sm text-muted-foreground line-through">Rs {product.originalPrice}</span>
                     )}
                   </div>
                   <Badge variant="outline" className="text-xs">

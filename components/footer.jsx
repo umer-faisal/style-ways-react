@@ -23,12 +23,12 @@ export default function Footer() {
             </a>
 
             <div className="flex items-center mt-6 space-x-4">
-              <a href="#" aria-label="facebook" className="w-10 h-10 rounded-full border border-white flex items-center justify-center">
+              <a href="https://www.facebook.com/stylewayspk/" aria-label="facebook" className="w-10 h-10 rounded-full border border-white flex items-center justify-center">
                 {/* facebook svg */}
                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07C1.86 17.06 5.95 21.21 10.75 21.95v-6.92H8.08v-2.96h2.67V9.41c0-2.64 1.58-4.09 3.99-4.09 1.16 0 2.38.21 2.38.21v2.62h-1.34c-1.32 0-1.73.82-1.73 1.66v2.01h2.95l-.47 2.96h-2.48v6.92C18.05 21.21 22 17.06 22 12.07z"></path></svg>
               </a>
 
-              <a href="#" aria-label="instagram" className="w-10 h-10 rounded-full border border-white flex items-center justify-center">
+              <a href="https://www.instagram.com/stylewayspk/" aria-label="instagram" className="w-10 h-10 rounded-full border border-white flex items-center justify-center">
                 {/* instagram svg */}
                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.66 0 3 1.34 3 3v10c0 1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3h10zm-5 4a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-3a1.5 1.5 0 11-.001 3.001A1.5 1.5 0 0116.5 5z"></path></svg>
               </a>
@@ -39,7 +39,7 @@ export default function Footer() {
             <h4 className="font-semibold text-white mb-6">Help</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href="#" className="text-white hover:text-primary">Privacy Policy</a>
+                <a href="#" className="text-white hover:text-offwhite">Privacy Policy</a>
               </li>
               <li>
                 <a href="#" className="text-white hover:text-primary">Returns + Exchanges</a>
