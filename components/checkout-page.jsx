@@ -144,7 +144,7 @@ export default function CheckoutPage() {
 				.map((item) => {
 					const price = Number(item.price || 0)
 					const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
-					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(2)}`
+					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
 				})
 				.join("\n"),
 			// HTML-safe version for EmailJS HTML templates (use {{{orderItemsHtml}}} in template)
@@ -152,12 +152,12 @@ export default function CheckoutPage() {
 				.map((item) => {
 					const price = Number(item.price || 0)
 					const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
-					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(2)}`
+					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
 				})
 				.join("<br/>") ,
 			// structured data for debugging
 			itemsJson: JSON.stringify(items, null, 2),
-			total: total.toFixed(2),
+			total: total.toFixed(0),
 		}
 
 		// Debug logs to verify sizes are present and fields sent to EmailJS
@@ -175,7 +175,7 @@ export default function CheckoutPage() {
 
 			clearCart()
 			// navigate to the correct success page (hyphenated path)
-			router.push("/checkout-success")
+			router.push("/checkout/success")
 		} catch (error) {
 			console.error("EmailJS error:", error)
 			alert("Failed to send order confirmation. Please try again.")
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
 														Qty: {item.quantity}
 													</p>
 												</div>
-												<p className="font-semibold">Rs {(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
+												<p className="font-semibold">Rs {(Number(item.price) * Number(item.quantity)).toFixed(0)}</p>
 											</div>
 										))}
 									</CardContent>
@@ -459,7 +459,7 @@ export default function CheckoutPage() {
 								<div className="space-y-2">
 									<div className="flex justify-between">
 										<span>Subtotal ({itemCount} items)</span>
-										<span>Rs{subtotal.toFixed(2)}</span>
+										<span>Rs{subtotal.toFixed(0)}</span>
 									</div>
 
 									<div className="flex justify-between">
@@ -471,12 +471,12 @@ export default function CheckoutPage() {
 												</Badge>
 											)}
 										</span>
-										<span>Rs {shipping.toFixed(2)}</span>
+										<span>Rs {shipping.toFixed(0)}</span>
 									</div>
 
 									<div className="flex justify-between">
 										<span>Tax</span>
-										<span>Rs {tax.toFixed(2)}</span>
+										<span>Rs {tax.toFixed(0)}</span>
 									</div>
 								</div>
 
@@ -484,7 +484,7 @@ export default function CheckoutPage() {
 
 								<div className="flex justify-between text-lg font-bold">
 									<span>Total</span>
-									<span>Rs{total.toFixed(2)}</span>
+									<span>Rs{total.toFixed(0)}</span>
 								</div>
 
 								<div className="space-y-2 pt-4">

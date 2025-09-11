@@ -76,8 +76,37 @@ export function CartProvider({ children }) {
     })
   }
 
-  const removeItem = (itemKeyToRemove) => {
-    setItems((prev) => prev.filter((it) => itemKey(it) !== itemKeyToRemove))
+  // removeItem: accepts either the internal key (id::size) or a plain id
+  const removeItem = (idOrKey) => {
+    setItems((prev) =>
+      prev.filter((it) => {
+        if (!it) return false
+        if (typeof idOrKey === "string" && idOrKey.includes("::")) {
+          return itemKey(it) !== idOrKey
+        }
+        // treat as id match
+        return String(it.id) !== String(idOrKey)
+      })
+    )
+  }
+
+  // updateQuantity: accepts either id or id::size and a new numeric quantity
+  const updateQuantity = (idOrKey, newQuantity) => {
+    setItems((prev) => {
+      const idx = prev.findIndex(
+        (it) => itemKey(it) === idOrKey || String(it.id) === String(idOrKey)
+      )
+      if (idx === -1) return prev
+      const next = [...prev]
+      const qty = Number(newQuantity || 0)
+      if (qty <= 0) {
+        // remove item when quantity becomes 0 or less
+        next.splice(idx, 1)
+      } else {
+        next[idx] = { ...next[idx], quantity: qty }
+      }
+      return next
+    })
   }
 
   const clearCart = () => setItems([])
@@ -87,7 +116,7 @@ export function CartProvider({ children }) {
   const getTotal = () => items.reduce((sum, it) => sum + Number(it.price || 0) * Number(it.quantity || 0), 0)
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, clearCart, getItemCount, getTotal }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, getItemCount, getTotal }}>
       {children}
     </CartContext.Provider>
   )
