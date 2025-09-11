@@ -123,6 +123,13 @@ export default function ProductDetail({ productId }) {
   const discountPercentage =
     originalPriceNum > priceNum ? Math.round(((originalPriceNum - priceNum) / originalPriceNum) * 100) : 0
 
+  // add: helper to format price and strip unnecessary ".00"
+  const formatPrice = (value) => {
+    const num = Number(value) || 0
+    // whole numbers show without decimals, otherwise keep up to 2 decimals (trim trailing zeros)
+    return num % 1 === 0 ? String(num) : num.toFixed(2).replace(/\.?0+$/, "")
+  }
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
@@ -215,10 +222,10 @@ export default function ProductDetail({ productId }) {
 
             {/* Price */}
             <div className="flex items-center space-x-3 mb-4">
-              <span className="text-3xl font-bold text-foreground">Rs {priceNum.toFixed(2)}</span>
+              <span className="text-3xl font-bold text-foreground">Rs {formatPrice(priceNum)}</span>
               {discountPercentage > 0 && (
                 <>
-                  <span className="text-xl text-muted-foreground line-through">Rs {originalPriceNum.toFixed(2)}</span>
+                  <span className="text-xl text-muted-foreground line-through">Rs {formatPrice(originalPriceNum)}</span>
                   <Badge variant="secondary" className="bg-accent text-accent-foreground">
                     {discountPercentage}% OFF
                   </Badge>
@@ -263,7 +270,7 @@ export default function ProductDetail({ productId }) {
             <div className="flex items-center space-x-4">
               <span className="text-sm font-medium">Quantity:</span>
               <div className="flex items-center border rounded-lg">
-                <Button variant="ghost" size="sm" onClick={() => handleQuantityChange(-1)} disabled={quantity <= 1}>
+                <Button variant="ghost" size="sm" onClick={() => handleQuantityChange(-1)} disabled={quantity <= 1} className="cursor-pointer"> 
                   <Minus className="h-4 w-4" />
                 </Button>
                 <span className="px-4 py-2 text-center min-w-[3rem]">{quantity}</span>
@@ -272,6 +279,7 @@ export default function ProductDetail({ productId }) {
                   size="sm"
                   onClick={() => handleQuantityChange(1)}
                   disabled={stockCount ? quantity >= stockCount : false}
+                  className="cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -279,14 +287,14 @@ export default function ProductDetail({ productId }) {
             </div>
 
             <div className="flex space-x-3">
-              <Button className="flex-1" size="lg" disabled={!product.inStock || isAdding} onClick={handleAddToCart}>
+              <Button className="flex-1 cursor-pointer" size="lg" disabled={!product.inStock || isAdding} onClick={handleAddToCart}>
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                {isAdding ? "Adding..." : `Add to Cart - Rs ${(priceNum * quantity).toFixed(2)}`}
+                {isAdding ? "Adding..." : `Add to Cart - Rs ${formatPrice(priceNum * quantity)}`}
               </Button>
               <Button variant="outline" size="lg" onClick={() => setIsWishlisted(!isWishlisted)}>
                 <Heart className={`h-5 w-5 ${isWishlisted ? "fill-current text-red-500" : ""}`} />
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="cursor-pointer">
                 <Share2 className="h-5 w-5" />
               </Button>
             </div>

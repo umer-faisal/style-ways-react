@@ -112,7 +112,7 @@ export default function AccountPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-lg font-semibold">Total: ${cartTotal.toFixed(2)}</span>
+                    <span className="text-lg font-semibold">Total: Rs {cartTotal.toFixed(2)}</span>
                     <Badge variant="secondary">{cartItemCount} items</Badge>
                   </div>
                   <div className="flex space-x-2">

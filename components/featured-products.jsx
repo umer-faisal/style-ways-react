@@ -116,7 +116,7 @@ export default function FeaturedProducts() {
                   </div>
 
                   <Button
-                    className="w-full"
+                    className="w-full cursor-pointer"
                     size="sm"
                     disabled={addingItems[product.id]}
                     onClick={() => handleAddToCart(product)}

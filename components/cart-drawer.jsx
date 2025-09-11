@@ -85,7 +85,7 @@ export default function CartDrawer() {
                           <Button
                             variant="outline"
                             size="icon"
-                            className="h-8 w-8 bg-transparent"
+                            className="h-8 w-8 bg-transparent cursor-pointer"
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
@@ -97,12 +97,12 @@ export default function CartDrawer() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive cursor-pointer"
                           onClick={() => removeItem(item.id)}
                         >
                           <X className="h-4 w-4" />
                         </Button>
-                        <p className="text-sm font-semibold">${(Number(item.price ?? 0) * item.quantity).toFixed(2)}</p>
+                        <p className="text-sm font-semibold">Rs {(Number(item.price ?? 0) * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -110,22 +110,22 @@ export default function CartDrawer() {
               </div>
 
               {/* Cart Summary */}
-              <div className="border-t pt-4 space-y-4">
-                <div className="flex justify-between items-center">
+              <div className="border-t pt-4 space-y-4 pb-4">
+                <div className="flex justify-between pl-[16px] pr-[12px] items-center">
                   <span className="text-base font-medium">Subtotal:</span>
-                  <span className="text-lg font-bold">${Number(total ?? 0).toFixed(2)}</span>
+                  <span className="text-lg font-bold">Rs {Number(total ?? 0).toFixed(2)}</span>
                 </div>
 
                 <Separator />
 
                 <div className="space-y-2">
-                  <Button className="w-full" size="lg" onClick={() => setIsOpen(false)} asChild>
+                  <Button className="w-full cursor-pointer" size="lg" onClick={() => setIsOpen(false)} asChild>
                     <Link href="/cart">View Cart</Link>
                   </Button>
 
                   <Button
                     variant="outline"
-                    className="w-full bg-transparent"
+                    className="w-full bg-transparent cursor-pointer"
                     size="lg"
                     onClick={() => setIsOpen(false)}
                     asChild

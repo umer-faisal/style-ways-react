@@ -286,7 +286,7 @@ export default function ProductCatalog() {
                 </div>
 
                 <Button
-                  className="w-full"
+                  className="w-full cursor-pointer"
                   size="sm"
                   disabled={!product.inStock || addingItems[product.id]}
                   onClick={() => handleAddToCart(product)}

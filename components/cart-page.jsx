@@ -26,7 +26,7 @@ export default function CartPage() {
           <p className="text-muted-foreground mb-8">
             Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" asChild className="cursor-pointer">
             <Link href="/products">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Continue Shopping
@@ -40,8 +40,8 @@ export default function CartPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Shopping Cart</h1>
-        <p className="text-muted-foreground">{itemCount} items in your cart</p>
+        <h1 className="text-3xl font-bold text-[#333333] mb-2">Shopping Cart</h1>
+        <p className="text-[#333333]">{itemCount} items in your cart</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -49,7 +49,7 @@ export default function CartPage() {
         <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Cart Items</h2>
-            <Button variant="outline" size="sm" onClick={clearCart}>
+            <Button variant="outline" size="sm" onClick={clearCart} className="cursor-pointer">
               Clear Cart
             </Button>
           </div>
@@ -69,7 +69,7 @@ export default function CartPage() {
 
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-semibold text-foreground mb-1">{item.name}</h3>
-                      <p className="text-muted-foreground mb-3">${Number(item.price).toFixed(2)} each</p>
+                      <p className="text-muted-foreground mb-3">Rs {Number(item.price).toFixed(2)} each</p>
 
                       <div className="flex items-center space-x-3">
                         <span className="text-sm font-medium">Quantity:</span>
@@ -79,6 +79,8 @@ export default function CartPage() {
                             size="sm"
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
+                            className="cursor-pointer"
+
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
@@ -99,7 +101,7 @@ export default function CartPage() {
                       >
                         <X className="h-5 w-5" />
                       </Button>
-                      <p className="text-xl font-bold">${(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
+                      <p className="text-xl font-bold">Rs {(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -119,7 +121,7 @@ export default function CartPage() {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <Card className="sticky top-24">
+          <Card className="sticky top-24 pt-6 pb-4">
             <CardHeader>
               <CardTitle>Order Summary</CardTitle>
             </CardHeader>
@@ -127,7 +129,7 @@ export default function CartPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal ({itemCount} items)</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>Rs {subtotal.toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between">
@@ -139,12 +141,12 @@ export default function CartPage() {
                       </Badge>
                     )}
                   </span>
-                  <span>${shipping.toFixed(2)}</span>
+                  <span>Rs {shipping.toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>Rs {tax.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -152,14 +154,14 @@ export default function CartPage() {
 
               <div className="flex justify-between text-lg font-bold">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>Rs {total.toFixed(2)}</span>
               </div>
 
               {shipping > 0 && (
                 <div className="bg-muted p-3 rounded-lg">
                   <div className="flex items-center gap-2 text-sm">
                     <Truck className="h-4 w-4" />
-                    <span>Add ${(50 - subtotal).toFixed(2)} more for free shipping</span>
+                    <span>Add Rs {(50 - subtotal).toFixed(2)} more for free shipping</span>
                   </div>
                 </div>
               )}
