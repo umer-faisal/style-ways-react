@@ -121,6 +121,15 @@ export default function CheckoutPage() {
 	const handlePlaceOrder = async () => {
 		setIsProcessing(true)
 
+		// Ensure any items that require a size have one selected
+		for (const item of items) {
+			if (Object.prototype.hasOwnProperty.call(item, 'selectedSize') && !item.selectedSize) {
+				alert(`Please select a size for "${item.name}" before placing the order.`)
+				setIsProcessing(false)
+				return
+			}
+		}
+
 		const templateParams = {
 			firstName: shippingInfo.firstName,
 			lastName: shippingInfo.lastName,
@@ -132,10 +141,29 @@ export default function CheckoutPage() {
 			zipCode: shippingInfo.zipCode,
 			country: shippingInfo.country,
 			orderItems: items
-				.map((item) => `${item.name} (x${item.quantity}) - $${(Number(item.price) * Number(item.quantity)).toFixed(2)}`)
+				.map((item) => {
+					const price = Number(item.price || 0)
+					const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
+					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(2)}`
+				})
 				.join("\n"),
+			// HTML-safe version for EmailJS HTML templates (use {{{orderItemsHtml}}} in template)
+			orderItemsHtml: items
+				.map((item) => {
+					const price = Number(item.price || 0)
+					const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
+					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(2)}`
+				})
+				.join("<br/>") ,
+			// structured data for debugging
+			itemsJson: JSON.stringify(items, null, 2),
 			total: total.toFixed(2),
 		}
+
+		// Debug logs to verify sizes are present and fields sent to EmailJS
+		console.log("Sending order, templateParams.orderItems:\n", templateParams.orderItems)
+		console.log("Sending order, templateParams.orderItemsHtml:\n", templateParams.orderItemsHtml)
+		console.log("Sending order, items object:\n", templateParams.itemsJson)
 
 		try {
 			await emailjs.send(
@@ -353,9 +381,12 @@ export default function CheckoutPage() {
 												/>
 												<div className="flex-1">
 													<h4 className="font-medium">{item.name}</h4>
-													<p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+													<p className="text-sm text-muted-foreground">
+														{item.selectedSize && <span className="mr-2">Size: {item.selectedSize} •</span>}
+														Qty: {item.quantity}
+													</p>
 												</div>
-												<p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+												<p className="font-semibold">${(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
 											</div>
 										))}
 									</CardContent>

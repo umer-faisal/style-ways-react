@@ -1,135 +1,100 @@
 "use client"
 
-import { createContext, useContext, useReducer, useEffect } from "react"
+import React, { createContext, useContext, useState, useEffect } from "react"
 
-const CartContext = createContext()
+const CartContext = createContext(null)
 
-const cartReducer = (state, action) => {
-  switch (action.type) {
-    case "ADD_ITEM":
-      const existingItem = state.items.find((item) => item.id === action.payload.id)
-      if (existingItem) {
-        return {
-          ...state,
-          items: state.items.map((item) =>
-            item.id === action.payload.id ? { ...item, quantity: item.quantity + action.payload.quantity } : item,
-          ),
-        }
-      }
-      return {
-        ...state,
-        items: [...state.items, action.payload],
-      }
+// helper: extract a safe image url from an item (common API shapes) with fallback
+const normalizeImage = (it) => {
+  if (!it) return "/logo/final-logo.png"
+  const candidates = [
+    it.image,
+    Array.isArray(it.images) && (it.images[0]?.url || it.images[0]),
+    it.images?.[0]?.url,
+    it.image_url,
+    it.thumbnail,
+    Array.isArray(it.media) && (it.media[0]?.src || it.media[0]),
+    it.featured_image?.url || it.featured_image,
+  ].filter(Boolean)
 
-    case "REMOVE_ITEM":
-      return {
-        ...state,
-        items: state.items.filter((item) => item.id !== action.payload),
-      }
+  let found = candidates.find(Boolean)
 
-    case "UPDATE_QUANTITY":
-      return {
-        ...state,
-        items: state.items
-          .map((item) => (item.id === action.payload.id ? { ...item, quantity: action.payload.quantity } : item))
-          .filter((item) => item.quantity > 0),
-      }
+  if (found && typeof found === "object") {
+    found = found.url || found.src || found.path || null
+  }
 
-    case "CLEAR_CART":
-      return {
-        ...state,
-        items: [],
-      }
+  return found || "/logo/final-logo.png"
+}
 
-    case "LOAD_CART":
-      return {
-        ...state,
-        items: action.payload || [],
-      }
-
-    default:
-      return state
+const normalizeItem = (item) => {
+  if (!item) return item
+  return {
+    ...item,
+    image: normalizeImage(item),
   }
 }
 
 export function CartProvider({ children }) {
-  const [state, dispatch] = useReducer(
-    cartReducer,
-    undefined,
-    () => {
-      try {
-        if (typeof window === "undefined") return { items: [] }
-        const primary = localStorage.getItem("shopping-cart")
-        const legacy = localStorage.getItem("cart_items")
-        const parsed = primary ? JSON.parse(primary) : legacy ? JSON.parse(legacy) : []
-        return { items: parsed }
-      } catch (e) {
-        return { items: [] }
-      }
-    },
-  )
+  const [items, setItems] = useState(() => {
+    try {
+      const raw = localStorage.getItem("cartItems")
+      const parsed = raw ? JSON.parse(raw) : []
+      // normalize any saved items so UI can read item.image reliably
+      return Array.isArray(parsed) ? parsed.map(normalizeItem) : []
+    } catch (e) {
+      return []
+    }
+  })
 
-  // Save cart to localStorage whenever it changes (write both primary and legacy keys)
   useEffect(() => {
     try {
-      const serialized = JSON.stringify(state.items)
-      localStorage.setItem("shopping-cart", serialized)
-      localStorage.setItem("cart_items", serialized)
+      localStorage.setItem("cartItems", JSON.stringify(items))
     } catch (e) {
-      // ignore write errors
+      // ignore
     }
-  }, [state.items])
+  }, [items])
 
-  const addItem = (product, quantity = 1) => {
-    dispatch({
-      type: "ADD_ITEM",
-      payload: {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image || product.images?.[0],
-        quantity,
-      },
+  // Helper: unique key for merging items (considers selectedSize)
+  const itemKey = (item) => `${item.id}::${item.selectedSize ?? ""}`
+
+  const addItem = (item, quantity = 1) => {
+    // ensure item has a normalized image before storing/merging
+    const normalized = normalizeItem(item)
+    setItems((prev) => {
+      const key = itemKey(normalized)
+      const existingIndex = prev.findIndex((it) => itemKey(it) === key)
+      if (existingIndex > -1) {
+        const next = [...prev]
+        next[existingIndex] = {
+          ...next[existingIndex],
+          quantity: Number(next[existingIndex].quantity || 0) + Number(quantity),
+        }
+        return next
+      }
+      // ensure we store a shallow copy with quantity
+      return [...prev, { ...normalized, quantity: Number(quantity) }]
     })
   }
 
-  const removeItem = (id) => {
-    dispatch({ type: "REMOVE_ITEM", payload: id })
+  const removeItem = (itemKeyToRemove) => {
+    setItems((prev) => prev.filter((it) => itemKey(it) !== itemKeyToRemove))
   }
 
-  const updateQuantity = (id, quantity) => {
-    dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } })
-  }
+  const clearCart = () => setItems([])
 
-  const clearCart = () => {
-    dispatch({ type: "CLEAR_CART" })
-  }
+  const getItemCount = () => items.reduce((sum, it) => sum + Number(it.quantity || 0), 0)
 
-  const getItemCount = () => {
-    return state.items.reduce((total, item) => total + item.quantity, 0)
-  }
+  const getTotal = () => items.reduce((sum, it) => sum + Number(it.price || 0) * Number(it.quantity || 0), 0)
 
-  const getTotal = () => {
-    return state.items.reduce((total, item) => total + item.price * item.quantity, 0)
-  }
-
-  const value = {
-    items: state.items,
-    addItem,
-    removeItem,
-    updateQuantity,
-    clearCart,
-    getItemCount,
-    getTotal,
-  }
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
+  return (
+    <CartContext.Provider value={{ items, addItem, removeItem, clearCart, getItemCount, getTotal }}>
+      {children}
+    </CartContext.Provider>
+  )
 }
 
-export function useCart() {
-  const context = useContext(CartContext)
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider")
-  }
-  return context
+export const useCart = () => {
+  const ctx = useContext(CartContext)
+  if (!ctx) throw new Error("useCart must be used within CartProvider")
+  return ctx
 }

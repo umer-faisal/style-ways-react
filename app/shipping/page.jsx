@@ -1,13 +1,13 @@
-import ReturnPolicy from "../../components/return-policy"
+import Shipping from "../../components/shipping-policy"
 import Header from "../../components/header"
 import Footer from "../../components/footer"
 
-export default function ReturnPage() {
+export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <ReturnPolicy />
+        <Shipping />
       </main>
       <Footer />
     </div>

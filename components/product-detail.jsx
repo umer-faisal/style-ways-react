@@ -52,6 +52,7 @@ const getProductById = (id) => {
     category: "Drop-Shoulder",
     inStock: true,
     description: "Advanced fitness tracking and smart notifications",
+    sizes: ["S","M","L","XL"],
   },
   {
     id: 3,
@@ -64,6 +65,7 @@ const getProductById = (id) => {
     category: "Accessories",
     inStock: true,
     description: "Durable laptop backpack with multiple compartments",
+    sizes: ["XS","S","M","L","XL"],
   },
   ]
 
@@ -77,6 +79,14 @@ export default function ProductDetail({ productId }) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
+  
+  // Determine if this product is clothing (has sizes or name/category hint)
+  const isClothing = Array.isArray(product.sizes) || /(tee|shirt|drop|shoulder|dress|pant|jeans|hoodie|apparel|clothe)/i.test(
+    `${product.category} ${product.name}`
+  )
+
+  const sizes = Array.isArray(product.sizes) ? product.sizes : ["XS", "S", "M", "L", "XL"]
+  const [selectedSize, setSelectedSize] = useState(isClothing ? sizes[0] : "")
 
   // Normalize product data and provide safe defaults
   const images = Array.isArray(product.images) ? product.images : product.image ? [product.image] : []
@@ -92,7 +102,17 @@ export default function ProductDetail({ productId }) {
 
   const handleAddToCart = async () => {
     setIsAdding(true)
-    addItem(product, quantity)
+    if (isClothing && !selectedSize) {
+      // require size selection for clothing
+      alert('Please select a size before adding to cart.')
+      setIsAdding(false)
+      return
+    }
+    // include selectedSize in item payload for clothing
+    const itemToAdd = isClothing ? { ...product, selectedSize } : product
+    // Debug log: inspect item sent to cart
+    console.log('Adding to cart:', itemToAdd)
+    addItem(itemToAdd, quantity)
 
     // Simulate loading state
     setTimeout(() => {
@@ -195,10 +215,10 @@ export default function ProductDetail({ productId }) {
 
             {/* Price */}
             <div className="flex items-center space-x-3 mb-4">
-              <span className="text-3xl font-bold text-foreground">${priceNum.toFixed(2)}</span>
+              <span className="text-3xl font-bold text-foreground">Rs {priceNum.toFixed(2)}</span>
               {discountPercentage > 0 && (
                 <>
-                  <span className="text-xl text-muted-foreground line-through">${originalPriceNum.toFixed(2)}</span>
+                  <span className="text-xl text-muted-foreground line-through">Rs {originalPriceNum.toFixed(2)}</span>
                   <Badge variant="secondary" className="bg-accent text-accent-foreground">
                     {discountPercentage}% OFF
                   </Badge>
@@ -224,6 +244,22 @@ export default function ProductDetail({ productId }) {
 
           {/* Quantity and Add to Cart */}
           <div className="space-y-4">
+            {isClothing && (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium">Size:</span>
+                <div className="inline-flex items-center space-x-2">
+                  {sizes.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setSelectedSize(s)}
+                      className={`px-3 py-2 border rounded text-sm ${selectedSize === s ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex items-center space-x-4">
               <span className="text-sm font-medium">Quantity:</span>
               <div className="flex items-center border rounded-lg">
@@ -245,7 +281,7 @@ export default function ProductDetail({ productId }) {
             <div className="flex space-x-3">
               <Button className="flex-1" size="lg" disabled={!product.inStock || isAdding} onClick={handleAddToCart}>
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                {isAdding ? "Adding..." : `Add to Cart - $${(priceNum * quantity).toFixed(2)}`}
+                {isAdding ? "Adding..." : `Add to Cart - Rs ${(priceNum * quantity).toFixed(2)}`}
               </Button>
               <Button variant="outline" size="lg" onClick={() => setIsWishlisted(!isWishlisted)}>
                 <Heart className={`h-5 w-5 ${isWishlisted ? "fill-current text-red-500" : ""}`} />
@@ -277,7 +313,7 @@ export default function ProductDetail({ productId }) {
                   <Truck className="h-5 w-5 text-primary" />
                   <div>
                     <p className="text-sm font-medium">Free Shipping</p>
-                    <p className="text-xs text-muted-foreground">On orders over $50</p>
+                    <p className="text-xs text-muted-foreground">On orders over Rs 3000</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
