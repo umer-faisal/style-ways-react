@@ -174,7 +174,8 @@ export default function CheckoutPage() {
 			)
 
 			clearCart()
-			router.push("/checkout/success")
+			// navigate to the correct success page (hyphenated path)
+			router.push("/checkout-success")
 		} catch (error) {
 			console.error("EmailJS error:", error)
 			alert("Failed to send order confirmation. Please try again.")
@@ -393,7 +394,7 @@ export default function CheckoutPage() {
 								</Card>
 
 								<div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-									<Card>
+									<Card className="pt-6 pb-6">
 										<CardHeader>
 											<CardTitle className="text-lg">Shipping Address</CardTitle>
 										</CardHeader>
