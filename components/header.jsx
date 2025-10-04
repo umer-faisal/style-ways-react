@@ -39,11 +39,11 @@ export default function Header() {
               Shop
               <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
             </a>
-            <a href="#" className="group text-white text-sm font-medium transition-colors inline-block">
+            <a href="/aboutus" className="group text-white text-sm font-medium transition-colors inline-block">
               About Us
               <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
             </a>
-            <a href="#" className="group text-white text-sm font-medium transition-colors inline-block">
+            <a href="/contactus" className="group text-white text-sm font-medium transition-colors inline-block">
               Contact Us
               <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
             </a>

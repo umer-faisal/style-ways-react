@@ -39,16 +39,16 @@ export default function Footer() {
             <h4 className="font-semibold text-white mb-6">Help</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href="#" className="text-white hover:text-offwhite">Privacy Policy</a>
+                <a href="/privacy" className="text-white hover:text-offwhite">Privacy Policy</a>
               </li>
               <li>
-                <a href="#" className="text-white hover:text-primary">Returns + Exchanges</a>
+                <a href="/return" className="text-white hover:text-primary">Returns + Exchanges</a>
               </li>
               <li>
-                <a href="#" className="text-white hover:text-primary">Shipping Privacy</a>
+                <a href="/shipping" className="text-white hover:text-primary">Shipping Privacy</a>
               </li>
               <li>
-                <a href="#" className="text-white hover:text-primary">Terms & Conditions</a>
+                <a href="/terms" className="text-white hover:text-primary">Terms & Conditions</a>
               </li>
             </ul>
           </div>
@@ -60,13 +60,13 @@ export default function Footer() {
                 <a href="/products" className="text-white hover:text-primary">Visit Our Store</a>
               </li>
               <li>
-                <a href="/contact" className="text-white hover:text-primary">Contact Us</a>
+                <a href="/contactus" className="text-white hover:text-primary">Contact Us</a>
               </li>
               <li>
-                <a href="#" className="text-white hover:text-primary">About Us</a>
+                <a href="/aboutus" className="text-white hover:text-primary">About Us</a>
               </li>
               <li>
-                <a href="#" className="text-white hover:text-primary">FAQ</a>
+                <a href="/faq" className="text-white hover:text-primary">FAQ</a>
               </li>
             </ul>
           </div>
