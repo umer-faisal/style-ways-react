@@ -1,6 +1,6 @@
-import CheckoutSuccess from "../../../components/checkout-success"
-import Header from "../../../components/header"
-import Footer from "../../../components/footer"
+import CheckoutSuccess from "../../components/checkout-success"
+import Header from "../../components/header"
+import Footer from "../../components/footer"
 
 export default function CheckoutSuccessPage() {
   return (

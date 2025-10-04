@@ -68,7 +68,7 @@ export default function CheckoutPage() {
 
 	useEffect(() => {
 		if (items.length === 0) {
-			router.push("/cart")
+			router.push("/success")
 		}
 	}, [items.length, router])
 
@@ -175,7 +175,7 @@ export default function CheckoutPage() {
 
 			clearCart()
 			// navigate to the correct success page (hyphenated path)
-			router.push("/checkout/success")
+			router.push("/success")
 		} catch (error) {
 			console.error("EmailJS error:", error)
 			alert("Failed to send order confirmation. Please try again.")

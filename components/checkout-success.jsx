@@ -30,7 +30,7 @@ export default function CheckoutSuccess() {
         </p>
 
         {/* Order Details Card */}
-        <Card className="mb-8">
+        <Card className="mb-8 pt-4 pb-4">
           <CardHeader>
             <CardTitle className="flex items-center justify-center gap-2">
               <Receipt className="h-5 w-5" />
@@ -57,7 +57,7 @@ export default function CheckoutSuccess() {
         </Card>
 
         {/* What's Next */}
-        <Card className="mb-8">
+        <Card className="mb-8 pt-4 pb-4">
           <CardHeader>
             <CardTitle className="flex items-center justify-center gap-2">
               <Package className="h-5 w-5" />
@@ -105,12 +105,12 @@ export default function CheckoutSuccess() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" asChild>
+          {/* <Button size="lg" asChild>
             <Link href="/account">
               <Package className="h-4 w-4 mr-2" />
               View Order Status
             </Link>
-          </Button>
+          </Button> */}
 
           <Button variant="outline" size="lg" asChild>
             <Link href="/products">
