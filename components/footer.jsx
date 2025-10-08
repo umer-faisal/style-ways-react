@@ -2,8 +2,10 @@ export default function Footer() {
   return (
     <footer className="bg-[#000000] text-white border-t">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          <div>
+        {/* Mobile: Stacked layout, Desktop: 3-column grid */}
+        <div className="block md:grid md:grid-cols-3 gap-8 items-start">
+          {/* Company Info - Full width on mobile, 1/3 on desktop */}
+          <div className="mb-8 md:mb-0">
             <a href="/" className="inline-flex items-center mb-4">
               <img src="/logo/final-logo.png" alt="styleways" className="h-16 w-16" />
             </a>
@@ -35,45 +37,55 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="mt-8">
-            <h4 className="font-semibold text-white mb-6">Help</h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="/privacy" className="text-white hover:text-offwhite">Privacy Policy</a>
-              </li>
-              <li>
-                <a href="/return" className="text-white hover:text-primary">Returns + Exchanges</a>
-              </li>
-              <li>
-                <a href="/shipping" className="text-white hover:text-primary">Shipping Privacy</a>
-              </li>
-              <li>
-                <a href="/terms" className="text-white hover:text-primary">Terms & Conditions</a>
-              </li>
-            </ul>
-          </div>
+          {/* Mobile: Help and Useful Links side by side, Desktop: separate columns */}
+          <div className="grid grid-cols-2 md:contents gap-6 md:gap-0">
+            <div className="md:mt-0">
+              <h4 className="font-semibold text-white mb-6">Help</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="/privacy" className="text-white hover:text-offwhite">Privacy Policy</a>
+                </li>
+                <li>
+                  <a href="/return" className="text-white hover:text-primary">Returns + Exchanges</a>
+                </li>
+                <li>
+                  <a href="/shipping" className="text-white hover:text-primary">Shipping Privacy</a>
+                </li>
+                <li>
+                  <a href="/terms" className="text-white hover:text-primary">Terms & Conditions</a>
+                </li>
+              </ul>
+            </div>
 
-          <div className="mt-8">
-            <h4 className="font-semibold text-white mb-6">Useful Links</h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="/products" className="text-white hover:text-primary">Visit Our Store</a>
-              </li>
-              <li>
-                <a href="/contactus" className="text-white hover:text-primary">Contact Us</a>
-              </li>
-              <li>
-                <a href="/aboutus" className="text-white hover:text-primary">About Us</a>
-              </li>
-              <li>
-                <a href="/faq" className="text-white hover:text-primary">FAQ</a>
-              </li>
-            </ul>
+            <div className="md:mt-0">
+              <h4 className="font-semibold text-white mb-6">Useful Links</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="/products" className="text-white hover:text-primary">Visit Our Store</a>
+                </li>
+                <li>
+                  <a href="/contactus" className="text-white hover:text-primary">Contact Us</a>
+                </li>
+                <li>
+                  <a href="/aboutus" className="text-white hover:text-primary">About Us</a>
+                </li>
+                <li>
+                  <a href="/faq" className="text-white hover:text-primary">FAQ</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-8 text-center">
-          <p className="text-white text-sm">© 2025 StyleWays. All rights reserved.</p>
+        <div className="border-t mt-8 pt-8">
+          <div className="flex flex-col sm:flex-row justify-between  text-sm">
+            <p className="text-white mb-2 sm:mb-0">
+              Copyright © 2025 <span className="text-white">StyleWays</span>. All Rights Reserved.
+            </p>
+            <p className="text-white items-center hover:text-primary">
+              Developed by <span className="text-white">Muhammad Umer Faisal</span>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
