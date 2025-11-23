@@ -156,8 +156,8 @@ export default function ProductCatalog() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#000000] mb-2">All Products</h1>
-        <p className="text-[#333333]">Discover our complete collection of quality products</p>
+        <h1 className="text-3xl font-bold text-black mb-2">All Products</h1>
+        <p className="text-gray-800">Discover our complete collection of quality products</p>
       </div>
 
       {/* Search and Filters */}
@@ -218,7 +218,7 @@ export default function ProductCatalog() {
 
       {/* Results Count */}
       <div className="mb-6">
-        <p className="text-[#333333]">
+        <p className="text-gray-800">
           Showing {sortedProducts.length} of {allProducts.length} products
         </p>
       </div>

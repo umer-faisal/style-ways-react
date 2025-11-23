@@ -5,10 +5,16 @@ import { Input } from "../components/ui/input"
 import CartDrawer from "../components/cart-drawer"
 import UserDropdown from "../components/user-dropdown"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-black text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,7 +36,7 @@ export default function Header() {
           </div> */}
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-4">
             <Link href="/" className="group text-white text-sm font-medium transition-colors inline-block">
               Home
               <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
@@ -76,22 +82,24 @@ export default function Header() {
       </div>
 
       {/* Mobile nav panel */}
-      <div className={`md:hidden ${mobileOpen ? "block" : "hidden"}`}>
-        <nav className="flex flex-col bg-black text-white border-t">
-          <Link href="/" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
-            Home
-          </Link>
-          <a href="/products" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
-            Shop
-          </a>
-          <a href="#" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
-            About Us
-          </a>
-          <a href="#" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
-            Contact Us
-          </a>
-        </nav>
-      </div>
+      {isMounted && (
+        <div className={`md:hidden ${mobileOpen ? "block" : "hidden"}`}>
+          <nav className="flex flex-col bg-black text-white border-t">
+            <Link href="/" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
+              Home
+            </Link>
+            <a href="/products" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
+              Shop
+            </a>
+            <a href="#" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
+              About Us
+            </a>
+            <a href="#" className="px-4 py-3 text-sm font-medium hover:bg-gray-800" onClick={() => setMobileOpen(false)}>
+              Contact Us
+            </a>
+          </nav>
+        </div>
+      )}
     </header>
   )
 }

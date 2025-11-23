@@ -5,54 +5,18 @@ import Link from 'next/link';
 
 const Hero = () => {
 	return (
-		<div style={{
-			position: 'relative',
-			width: '100%',
-			height: '500px',
-			backgroundImage: 'url(/herobanner/banner1.jpg)',
-			backgroundSize: 'cover',
-			backgroundPosition: 'center',
-			backgroundRepeat: 'no-repeat',
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
-			overflow: 'hidden'
-		}}>
+		<div 
+			className="relative w-full h-[500px] bg-[url('/herobanner/banner2.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden"
+		>
 			{/* Overlay */}
-			<div style={{
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				right: 0,
-				bottom: 0,
-				background: 'rgba(0, 0, 0, 0.4)',
-				zIndex: 1
-			}} />
+			<div className="absolute inset-0 bg-black/40 z-[1]" />
 			
 			{/* Hero Content */}
-			<div style={{
-				position: 'relative',
-				zIndex: 2,
-				textAlign: 'center',
-				color: 'white',
-				padding: '0 20px'
-			}}>
-				<h1 style={{
-					fontSize: '3.5rem',
-					fontWeight: 'bold',
-					margin: '0 0 20px 0',
-					textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
-					letterSpacing: '2px'
-				}}>
+			<div className="relative z-[2] text-center text-white px-5">
+				<h1 className="text-[3.5rem] font-bold mb-5 [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)] tracking-[2px]">
 					StyleWays
 				</h1>
-				<p style={{
-					fontSize: '1.2rem',
-					margin: '0 0 30px 0',
-					textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
-					maxWidth: '600px',
-					margin: '0 auto 30px auto'
-				}}>
+				<p className="text-xl mb-8 [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)] max-w-[600px] mx-auto">
 					Discover Your Perfect Style - Where Fashion Meets Comfort
 				</p>
 				<Button 
@@ -70,16 +34,7 @@ const Hero = () => {
 				href="https://www.styleways.pk" 
 				target="_blank" 
 				rel="noopener noreferrer"
-				style={{
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					zIndex: 3,
-					textDecoration: 'none',
-					cursor: 'pointer'
-				}}
+				className="absolute top-0 left-0 w-full h-full z-[3] no-underline cursor-pointer"
 			>
 			</a> */}
 		</div>

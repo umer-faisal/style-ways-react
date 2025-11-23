@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useCart } from "../contexts/cart-context"
 import { useAuth } from "../contexts/auth-context"
 import { Button } from "./ui/button"
@@ -25,23 +25,20 @@ export default function CheckoutPage() {
 	const { user, isAuthenticated } = useAuth()
 	const router = useRouter()
 
-	const [currentStep, setCurrentStep] = useState(0)
-	const [isProcessing, setIsProcessing] = useState(false)
-	const [errors, setErrors] = useState({})
-
-	const [shippingInfo, setShippingInfo] = useState({
-		firstName: user?.name?.split(" ")[0] || "",
-		lastName: user?.name?.split(" ")[1] || "",
-		email: user?.email || "",
+	// Default values for initial state (same on server and client)
+	const defaultShippingInfo = {
+		firstName: "",
+		lastName: "",
+		email: "",
 		phone: "",
 		address: "",
 		city: "",
 		state: "",
 		zipCode: "",
 		country: "United States",
-	})
+	}
 
-	const [billingInfo, setBillingInfo] = useState({
+	const defaultBillingInfo = {
 		sameAsShipping: true,
 		firstName: "",
 		lastName: "",
@@ -49,16 +46,64 @@ export default function CheckoutPage() {
 		city: "",
 		state: "",
 		zipCode: "",
-		country: "United States",
-	})
+		country: "Pakistan",
+	}
 
-	const [paymentInfo, setPaymentInfo] = useState({
+	const defaultPaymentInfo = {
 		method: "card",
 		cardNumber: "",
 		expiryDate: "",
 		cvv: "",
 		cardName: "",
-	})
+	}
+
+	// Initialize with default values (same on server and client)
+	const [currentStep, setCurrentStep] = useState(0)
+	const [isProcessing, setIsProcessing] = useState(false)
+	const [errors, setErrors] = useState({})
+	const [shippingInfo, setShippingInfo] = useState(defaultShippingInfo)
+	const [billingInfo, setBillingInfo] = useState(defaultBillingInfo)
+	const [paymentInfo, setPaymentInfo] = useState(defaultPaymentInfo)
+	const [isHydrated, setIsHydrated] = useState(false)
+	const [isCartHydrated, setIsCartHydrated] = useState(false)
+
+	// Load from localStorage helper (client-side only)
+	const loadFromLocalStorage = (key, defaultValue) => {
+		if (typeof window === "undefined") return defaultValue
+		try {
+			const saved = localStorage.getItem(key)
+			return saved ? JSON.parse(saved) : defaultValue
+		} catch (e) {
+			return defaultValue
+		}
+	}
+
+	// Save to localStorage helper (client-side only)
+	const saveToLocalStorage = (key, value) => {
+		if (typeof window === "undefined") return
+		try {
+			localStorage.setItem(key, JSON.stringify(value))
+		} catch (e) {
+			console.error("Failed to save to localStorage:", e)
+		}
+	}
+
+	// Clear localStorage on mount and mark as hydrated
+	useEffect(() => {
+		// Clear old checkout data on page load/reload
+		if (typeof window !== "undefined") {
+			localStorage.removeItem("checkout_currentStep")
+			localStorage.removeItem("checkout_shippingInfo")
+			localStorage.removeItem("checkout_billingInfo")
+			localStorage.removeItem("checkout_paymentInfo")
+		}
+		// Mark as hydrated
+		setIsHydrated(true)
+		// Mark cart as hydrated after a brief delay to allow cart context to load
+		setTimeout(() => {
+			setIsCartHydrated(true)
+		}, 100)
+	}, []) // Run only once on mount
 
 	const itemCount = getItemCount()
 	const subtotal = getTotal()
@@ -66,15 +111,69 @@ export default function CheckoutPage() {
 	const tax = subtotal * 0.08
 	const total = subtotal + shipping + tax
 
+	// Only redirect to success if cart is hydrated and empty
 	useEffect(() => {
-		if (items.length === 0) {
+		if (isCartHydrated && items.length === 0) {
 			router.push("/success")
 		}
-	}, [items.length, router])
+	}, [items.length, router, isCartHydrated])
 
-	const validateShipping = () => {
+	// Save to localStorage whenever state changes (only after hydration) - debounced
+	useEffect(() => {
+		if (!isHydrated) return
+		const timeoutId = setTimeout(() => {
+			saveToLocalStorage("checkout_currentStep", currentStep)
+		}, 100)
+		return () => clearTimeout(timeoutId)
+	}, [currentStep, isHydrated])
+
+	useEffect(() => {
+		if (!isHydrated) return
+		const timeoutId = setTimeout(() => {
+			saveToLocalStorage("checkout_shippingInfo", shippingInfo)
+		}, 100)
+		return () => clearTimeout(timeoutId)
+	}, [shippingInfo, isHydrated])
+
+	useEffect(() => {
+		if (!isHydrated) return
+		const timeoutId = setTimeout(() => {
+			saveToLocalStorage("checkout_billingInfo", billingInfo)
+		}, 100)
+		return () => clearTimeout(timeoutId)
+	}, [billingInfo, isHydrated])
+
+	useEffect(() => {
+		if (!isHydrated) return
+		const timeoutId = setTimeout(() => {
+			saveToLocalStorage("checkout_paymentInfo", paymentInfo)
+		}, 100)
+		return () => clearTimeout(timeoutId)
+	}, [paymentInfo, isHydrated])
+
+	// Populate user data after hydration to prevent hydration mismatch
+	// Only populate if fields are empty (don't overwrite saved data)
+	useEffect(() => {
+		if (user && isAuthenticated) {
+			setShippingInfo(prev => {
+				// Only update if fields are empty
+				if (!prev.firstName && !prev.lastName && !prev.email) {
+					return {
+						...prev,
+						firstName: user?.name?.split(" ")[0] || "",
+						lastName: user?.name?.split(" ")[1] || "",
+						email: user?.email || "",
+					}
+				}
+				return prev
+			})
+		}
+	}, [user, isAuthenticated])
+
+	const validateShipping = useCallback(() => {
 		const newErrors = {}
-		const required = ["firstName", "lastName", "email", "phone", "address", "city", "state", "zipCode"]
+		// firstName and lastName are not in UI, so removed from required fields
+		const required = ["email", "phone", "address", "city", "state", "zipCode"]
 
 		required.forEach((field) => {
 			if (!shippingInfo[field]) {
@@ -86,9 +185,8 @@ export default function CheckoutPage() {
 			newErrors.email = "Please enter a valid email address"
 		}
 
-		setErrors(newErrors)
-		return Object.keys(newErrors).length === 0
-	}
+		return { isValid: Object.keys(newErrors).length === 0, errors: newErrors }
+	}, [shippingInfo])
 
 	const validatePayment = () => {
 		const newErrors = {}
@@ -104,19 +202,122 @@ export default function CheckoutPage() {
 		return Object.keys(newErrors).length === 0
 	}
 
-	const handleNext = () => {
-		if (currentStep === 0 && !validateShipping()) return
+	const handleNext = useCallback(async () => {
+		console.log("handleNext called, currentStep:", currentStep)
+		
+		if (currentStep === 0) {
+			const validation = validateShipping()
+			if (!validation.isValid) {
+				console.log("Validation failed:", validation.errors)
+				setErrors(validation.errors)
+				return
+			}
 
-		if (currentStep < CHECKOUT_STEPS.length - 1) {
-			setCurrentStep(currentStep + 1)
+			console.log("Validation passed, starting order placement...")
+			// On shipping step, place order directly with EmailJS
+			setIsProcessing(true)
+
+			// Ensure any items that require a size have one selected
+			for (const item of items) {
+				if (Object.prototype.hasOwnProperty.call(item, 'selectedSize') && !item.selectedSize) {
+					alert(`Please select a size for "${item.name}" before placing the order.`)
+					setIsProcessing(false)
+					return
+				}
+			}
+
+			// Prepare EmailJS template parameters
+			const templateParams = {
+				// firstName and lastName not in UI, so using default values
+				firstName: shippingInfo.firstName || "Customer",
+				lastName: shippingInfo.lastName || "",
+				email: shippingInfo.email,
+				phone: shippingInfo.phone,
+				address: shippingInfo.address,
+				city: shippingInfo.city,
+				state: shippingInfo.state,
+				zipCode: shippingInfo.zipCode,
+				country: shippingInfo.country,
+				orderItems: items
+					.map((item) => {
+						const price = Number(item.price || 0)
+						const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
+						return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
+					})
+					.join("\n"),
+				orderItemsHtml: items
+					.map((item) => {
+						const price = Number(item.price || 0)
+						const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
+						return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
+					})
+					.join("<br/>"),
+				itemsJson: JSON.stringify(items, null, 2),
+				total: total.toFixed(0),
+			}
+
+			console.log("Template params prepared:", templateParams)
+
+			try {
+				const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+				const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+				const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+				console.log("EmailJS config:", { serviceId: !!serviceId, templateId: !!templateId, publicKey: !!publicKey })
+
+				if (!serviceId || !templateId || !publicKey) {
+					throw new Error("EmailJS configuration is missing. Please check your environment variables.")
+				}
+
+				console.log("Sending EmailJS email...")
+				const result = await emailjs.send(
+					serviceId,
+					templateId,
+					templateParams,
+					publicKey
+				)
+				console.log("EmailJS success:", result)
+
+				// Clear checkout form data from localStorage after successful order
+				if (typeof window !== "undefined") {
+					localStorage.removeItem("checkout_shippingInfo")
+					localStorage.removeItem("checkout_billingInfo")
+					localStorage.removeItem("checkout_paymentInfo")
+					localStorage.removeItem("checkout_currentStep")
+				}
+
+				console.log("Clearing cart and redirecting...")
+				clearCart()
+				// Navigate to success page after successful EmailJS call
+				router.push("/success")
+				setIsProcessing(false)
+				return
+			} catch (error) {
+				console.error("EmailJS error:", error)
+				alert(`Failed to send order confirmation: ${error.message || "Please try again."}`)
+				setIsProcessing(false)
+				return
+			}
 		}
-	}
 
-	const handleBack = () => {
+		// Only move to next step if not on step 0 (step 0 places order directly)
+		if (currentStep > 0 && currentStep < CHECKOUT_STEPS.length - 1) {
+			// Clear errors before moving to next step
+			setErrors({})
+			// Immediate state update for better UX
+			setCurrentStep(prev => {
+				const nextStep = prev + 1
+				return nextStep
+			})
+		}
+	}, [currentStep, validateShipping, shippingInfo, items, total, clearCart, router])
+
+	const handleBack = useCallback(() => {
 		if (currentStep > 0) {
-			setCurrentStep(currentStep - 1)
+			// Immediate state update for better UX
+			setCurrentStep(prev => prev - 1)
 		}
-	}
+	}, [currentStep])
 
 	const handlePlaceOrder = async () => {
 		setIsProcessing(true)
@@ -131,8 +332,9 @@ export default function CheckoutPage() {
 		}
 
 		const templateParams = {
-			firstName: shippingInfo.firstName,
-			lastName: shippingInfo.lastName,
+			// firstName and lastName not in UI, so using default values
+			firstName: shippingInfo.firstName || "Customer",
+			lastName: shippingInfo.lastName || "",
 			email: shippingInfo.email,
 			phone: shippingInfo.phone,
 			address: shippingInfo.address,
@@ -166,12 +368,28 @@ export default function CheckoutPage() {
 		console.log("Sending order, items object:\n", templateParams.itemsJson)
 
 		try {
+			const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+			const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+			const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+			if (!serviceId || !templateId || !publicKey) {
+				throw new Error("EmailJS configuration is missing. Please check your environment variables.")
+			}
+
 			await emailjs.send(
-				"service_u4jhvh1",
-				"template_ujrlhxg",
+				serviceId,
+				templateId,
 				templateParams,
-				"ohfUSmK4hi0wqY3U5"
+				publicKey
 			)
+
+			// Clear checkout form data from localStorage after successful order
+			if (typeof window !== "undefined") {
+				localStorage.removeItem("checkout_shippingInfo")
+				localStorage.removeItem("checkout_billingInfo")
+				localStorage.removeItem("checkout_paymentInfo")
+				localStorage.removeItem("checkout_currentStep")
+			}
 
 			clearCart()
 			// navigate to the correct success page (hyphenated path)
@@ -195,6 +413,19 @@ export default function CheckoutPage() {
 		if (errors[field]) {
 			setErrors((prev) => ({ ...prev, [field]: "" }))
 		}
+	}
+
+	// Don't render until cart is hydrated to prevent redirect issues
+	if (!isCartHydrated) {
+		return (
+			<div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+				<div className="max-w-6xl mx-auto">
+					<div className="text-center py-16">
+						<p className="text-muted-foreground">Loading...</p>
+					</div>
+				</div>
+			</div>
+		)
 	}
 
 	if (items.length === 0) {
@@ -262,7 +493,7 @@ export default function CheckoutPage() {
 									</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-4">
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									{/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										<div>
 											<Label htmlFor="firstName">First Name</Label>
 											<Input
@@ -283,7 +514,7 @@ export default function CheckoutPage() {
 											/>
 											{errors.lastName && <p className="text-sm text-destructive mt-1">{errors.lastName}</p>}
 										</div>
-									</div>
+									</div> */}
 
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										<div>
@@ -431,18 +662,18 @@ export default function CheckoutPage() {
 
 						{/* Navigation Buttons */}
 						<div className="flex justify-between mt-8">
-							<Button variant="outline" onClick={handleBack} disabled={currentStep === 0}>
+							<Button variant="outline" onClick={handleBack} disabled={currentStep === 0} className= "cursor-pointer">
 								<ArrowLeft className="h-4 w-4 mr-2" />
 								Back
 							</Button>
 
 							{currentStep < CHECKOUT_STEPS.length - 1 ? (
-								<Button onClick={handleNext}>
-									Next
-									<ArrowRight className="h-4 w-4 ml-2" />
+								<Button onClick={handleNext} disabled={isProcessing} className= "cursor-pointer">
+									{isProcessing ? "Processing..." : "Next"}
+									{!isProcessing && <ArrowRight className="h-4 w-4 ml-2" />}
 								</Button>
 							) : (
-								<Button onClick={handlePlaceOrder} disabled={isProcessing}>
+								<Button onClick={handlePlaceOrder} disabled={isProcessing} className= "cursor-pointer">
 									{isProcessing ? "Processing..." : "Place Order"}
 								</Button>
 							)}
@@ -451,7 +682,7 @@ export default function CheckoutPage() {
 
 					{/* Order Summary */}
 					<div className="lg:col-span-1">
-						<Card className="sticky top-24 pt-6 pb-4">
+						<Card className="pt-6 pb-4">
 							<CardHeader>
 								<CardTitle>Order Summary</CardTitle>
 							</CardHeader>

@@ -35,24 +35,37 @@ const normalizeItem = (item) => {
 }
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState(() => {
+  // Initialize with empty array (same on server and client)
+  const [items, setItems] = useState([])
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  // Load from localStorage after hydration (client-side only)
+  useEffect(() => {
+    setIsHydrated(true)
     try {
       const raw = localStorage.getItem("cartItems")
-      const parsed = raw ? JSON.parse(raw) : []
-      // normalize any saved items so UI can read item.image reliably
-      return Array.isArray(parsed) ? parsed.map(normalizeItem) : []
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        // normalize any saved items so UI can read item.image reliably
+        const normalized = Array.isArray(parsed) ? parsed.map(normalizeItem) : []
+        if (normalized.length > 0) {
+          setItems(normalized)
+        }
+      }
     } catch (e) {
-      return []
+      // ignore
     }
-  })
+  }, [])
 
+  // Save to localStorage whenever items change (only after hydration)
   useEffect(() => {
+    if (!isHydrated) return
     try {
       localStorage.setItem("cartItems", JSON.stringify(items))
     } catch (e) {
       // ignore
     }
-  }, [items])
+  }, [items, isHydrated])
 
   // Helper: unique key for merging items (considers selectedSize)
   const itemKey = (item) => `${item.id}::${item.selectedSize ?? ""}`

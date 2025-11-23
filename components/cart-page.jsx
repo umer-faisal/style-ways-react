@@ -46,8 +46,8 @@ export default function CartPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#333333] mb-2">Shopping Cart</h1>
-        <p className="text-[#333333]">{itemCount} items in your cart</p>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Shopping Cart</h1>
+        <p className="text-gray-800">{itemCount} items in your cart</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -127,7 +127,7 @@ export default function CartPage() {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <Card className="sticky top-24 pt-6 pb-4">
+          <Card className="pt-6 pb-4">
             <CardHeader>
               <CardTitle>Order Summary</CardTitle>
             </CardHeader>

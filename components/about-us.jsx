@@ -13,7 +13,7 @@ export default function About() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-5xl mx-auto bg-[#e1e1e1] rounded-lg p-8 shadow-sm">
+        <div className="max-w-5xl mx-auto bg-gray-200 rounded-lg p-8 shadow-sm">
           <h3 className="text-lg md:text-xl font-medium text-center mb-2">At StyeWays, we are committed to:</h3>
           <p className="text-center text-sm text-gray-600 mb-6">Our talented stylists have put together outfits that are perfect for the season. They’ve variety of ways to inspire your next fashion-forward look.</p>
 

@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#000000] text-white border-t">
+    <footer className="bg-black text-white border-t">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Mobile: Stacked layout, Desktop: 3-column grid */}
         <div className="block md:grid md:grid-cols-3 gap-8 items-start">
