@@ -39,19 +39,19 @@ export default function Header() {
           <nav className="hidden md:flex items-center space-x-4">
             <Link href="/" className="group text-white text-sm font-medium transition-colors inline-block">
               Home
-              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
+              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-primary" />
             </Link>
             <a href="/products" className="group text-white text-sm font-medium transition-colors inline-block">
               Shop
-              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
+              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-primary" />
             </a>
             <a href="/aboutus" className="group text-white text-sm font-medium transition-colors inline-block">
               About Us
-              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
+              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-primary" />
             </a>
             <a href="/contactus" className="group text-white text-sm font-medium transition-colors inline-block">
               Contact Us
-              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-white" />
+              <span className="block h-[2px] w-6 bg-transparent mt-1 mx-auto transition-colors duration-200 group-hover:bg-primary" />
             </a>
           </nav>
 

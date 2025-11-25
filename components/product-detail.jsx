@@ -67,6 +67,204 @@ const getProductById = (id) => {
     description: "Durable laptop backpack with multiple compartments",
     sizes: ["XS","S","M","L","XL"],
   },
+  {
+    id: 9,
+    name: "Janan Sports Perfume",
+    price: 2499,
+    originalPrice: 2999,
+    images: ["/janan-sports/janan-sports-new.jpg"],
+    rating: 4.7,
+    reviews: 128,
+    category: "Perfumes",
+    inStock: true,
+    stockCount: 25,
+    description: "Top Notes: Bergamot, Lemon, Pineapple, Pink Pepper, Blackcurrant, Plum, Mandarin, Marine Notes. Heart Notes: Rose, Geranium, Jasmine, Lily of the valley. Base Notes: Cedarwood, Patchouli, Ambergris, Tonka, Vanilla, Musk",
+    features: [
+      "Premium floral fragrance blend",
+      "Long-lasting 8-10 hours",
+      "Elegant and sophisticated scent",
+      "Perfect for special occasions",
+      "Beautifully packaged gift-ready bottle",
+      "Suitable for all skin types",
+    ],
+    specifications: {
+      "Fragrance Type": "Amber, Chypre, Citrus, Musky, Woody",
+      "Top Notes": "Bergamot, Lemon, Pineapple, Pink Pepper, Blackcurrant, Plum, Mandarin, Marine Notes",
+      "Base Notes": "Rose, Geranium, Jasmine, Lily of the valley",
+      "Longevity": "8-10 hours",
+      "Sillage": "Moderate to Strong",
+    },
+    volumes: {
+      "30ml": { price: 999, originalPrice: 1299 },
+      "50ml": { price: 1599, originalPrice: 1999 },
+      "100ml": { price: 2499, originalPrice: 2999 },
+    },
+  },
+  {
+    id: 10,
+    name: "David Backham Perfume",
+    price: 2199,
+    originalPrice: 2699,
+    images: ["/david-backham/david-bekham-new.jpg"],
+    rating: 4.5,
+    reviews: 95,
+    category: "Perfumes",
+    inStock: true,
+    stockCount: 30,
+    description: "Top Notes: Bergamot, Lemon, Pineapple, Pink Pepper, Blackcurrant, Plum, Mandarin, Marine Notes. Heart Notes: Rose, Geranium, Jasmine, Lily of the valley. Base Notes: Cedarwood, Patchouli, Ambergris, Tonka, Vanilla, Musk",
+    features: [
+      "Refreshing aquatic scent",
+      "Perfect for daily wear",
+      "6-8 hours longevity",
+      "Light and energizing",
+      "Unisex fragrance",
+      "Great for hot weather",
+    ],
+    specifications: {
+      "Fragrance Type": "Aquatic",
+      "Top Notes": "Citrus, Marine",
+      "Base Notes": "Sea Salt, White Musk",
+      "Longevity": "6-8 hours",
+      "Sillage": "Moderate",
+    },
+    volumes: {
+      "30ml": { price: 899, originalPrice: 1149 },
+      "50ml": { price: 1399, originalPrice: 1799 },
+      "100ml": { price: 2199, originalPrice: 2699 },
+    },
+  },
+  {
+    id: 11,
+    name: "Musky Woods Cologne",
+    price: 2799,
+    originalPrice: 3299,
+    images: ["/perfume-woods.png", "/perfume-woods-side.png"],
+    rating: 4.8,
+    reviews: 156,
+    category: "Perfumes",
+    inStock: true,
+    stockCount: 20,
+    description: "Bold and masculine scent with sandalwood, cedar, and musk. Perfect for evening wear and sophisticated occasions.",
+    features: [
+      "Bold masculine fragrance",
+      "Long-lasting 10-12 hours",
+      "Perfect for evening events",
+      "Sophisticated and elegant",
+      "Premium wood-based notes",
+      "Signature scent material",
+    ],
+    specifications: {
+      "Fragrance Type": "Woody",
+      "Top Notes": "Cedar, Pine",
+      "Base Notes": "Sandalwood, Musk",
+      "Longevity": "10-12 hours",
+      "Sillage": "Strong",
+    },
+    volumes: {
+      "30ml": { price: 1099, originalPrice: 1399 },
+      "50ml": { price: 1799, originalPrice: 2199 },
+      "100ml": { price: 2799, originalPrice: 3299 },
+    },
+  },
+  {
+    id: 12,
+    name: "Vanilla Dream Perfume",
+    price: 2299,
+    originalPrice: 2799,
+    images: ["/perfume-vanilla.png", "/perfume-vanilla-side.png"],
+    rating: 4.6,
+    reviews: 112,
+    category: "Perfumes",
+    inStock: true,
+    stockCount: 28,
+    description: "Sweet and warm fragrance with vanilla, caramel, and soft floral notes. A comforting scent that lasts all day.",
+    features: [
+      "Sweet and warm fragrance",
+      "Comforting vanilla base",
+      "8-10 hours longevity",
+      "Perfect for cozy occasions",
+      "Delicious gourmand notes",
+      "All-day comfort scent",
+    ],
+    specifications: {
+      "Fragrance Type": "Gourmand",
+      "Top Notes": "Caramel, Honey",
+      "Base Notes": "Vanilla, Tonka Bean",
+      "Longevity": "8-10 hours",
+      "Sillage": "Moderate to Strong",
+    },
+    volumes: {
+      "30ml": { price: 949, originalPrice: 1199 },
+      "50ml": { price: 1499, originalPrice: 1899 },
+      "100ml": { price: 2299, originalPrice: 2799 },
+    },
+  },
+  {
+    id: 13,
+    name: "Citrus Fresh Spray",
+    price: 1999,
+    originalPrice: 2499,
+    images: ["/perfume-citrus.png", "/perfume-citrus-side.png"],
+    rating: 4.4,
+    reviews: 87,
+    category: "Perfumes",
+    inStock: true,
+    stockCount: 35,
+    description: "Zesty and invigorating blend of lemon, bergamot, and orange. Light and energizing fragrance for everyday use.",
+    features: [
+      "Zesty citrus blend",
+      "Light and refreshing",
+      "4-6 hours longevity",
+      "Perfect for daytime",
+      "Energizing and uplifting",
+      "Unisex fragrance",
+    ],
+    specifications: {
+      "Fragrance Type": "Citrus",
+      "Top Notes": "Lemon, Orange",
+      "Base Notes": "Bergamot, White Tea",
+      "Longevity": "4-6 hours",
+      "Sillage": "Light to Moderate",
+    },
+    volumes: {
+      "30ml": { price: 799, originalPrice: 999 },
+      "50ml": { price: 1299, originalPrice: 1649 },
+      "100ml": { price: 1999, originalPrice: 2499 },
+    },
+  },
+  {
+    id: 14,
+    name: "Lavender Fields",
+    price: 2399,
+    originalPrice: 2899,
+    images: ["/perfume-lavender.png", "/perfume-lavender-side.png"],
+    rating: 4.7,
+    reviews: 103,
+    category: "Perfumes",
+    inStock: true,
+    stockCount: 22,
+    description: "Calming and soothing scent with pure lavender essence. Perfect for relaxation and a peaceful day.",
+    features: [
+      "Calming lavender essence",
+      "Therapeutic and relaxing",
+      "6-8 hours longevity",
+      "Perfect for bedtime",
+      "Natural botanical scent",
+      "Stress-relief fragrance",
+    ],
+    specifications: {
+      "Fragrance Type": "Floral Herbal",
+      "Top Notes": "Lavender, Chamomile",
+      "Base Notes": "Woody Notes, Amber",
+      "Longevity": "6-8 hours",
+      "Sillage": "Moderate",
+    },
+    volumes: {
+      "30ml": { price: 999, originalPrice: 1249 },
+      "50ml": { price: 1599, originalPrice: 1999 },
+      "100ml": { price: 2399, originalPrice: 2899 },
+    },
+  },
   ]
 
   return products.find((p) => p.id === Number.parseInt(id)) || products[0]
@@ -85,13 +283,36 @@ export default function ProductDetail({ productId }) {
     `${product.category} ${product.name}`
   )
 
+  // Determine if this product is a perfume
+  const isPerfume = product.category === "Perfumes" && product.volumes
+
   const sizes = Array.isArray(product.sizes) ? product.sizes : ["XS", "S", "M", "L", "XL"]
   const [selectedSize, setSelectedSize] = useState(isClothing ? sizes[0] : "")
+  
+  // Volume selection for perfumes
+  const volumes = product.volumes ? Object.keys(product.volumes) : []
+  const [selectedVolume, setSelectedVolume] = useState(isPerfume ? (volumes.length > 0 ? volumes[volumes.length - 1] : "") : "")
 
   // Normalize product data and provide safe defaults
   const images = Array.isArray(product.images) ? product.images : product.image ? [product.image] : []
-  const priceNum = Number(product.price ?? 0)
-  const originalPriceNum = Number(product.originalPrice ?? priceNum)
+  
+  // Calculate price based on selected volume for perfumes
+  const getCurrentPrice = () => {
+    if (isPerfume && selectedVolume && product.volumes?.[selectedVolume]) {
+      return product.volumes[selectedVolume].price
+    }
+    return Number(product.price ?? 0)
+  }
+  
+  const getCurrentOriginalPrice = () => {
+    if (isPerfume && selectedVolume && product.volumes?.[selectedVolume]) {
+      return product.volumes[selectedVolume].originalPrice
+    }
+    return Number(product.originalPrice ?? getCurrentPrice())
+  }
+  
+  const priceNum = getCurrentPrice()
+  const originalPriceNum = getCurrentOriginalPrice()
   const features = product.features ?? []
   const specifications = product.specifications ?? {}
   const stockCount = Number(product.stockCount ?? 0)
@@ -108,8 +329,18 @@ export default function ProductDetail({ productId }) {
       setIsAdding(false)
       return
     }
-    // include selectedSize in item payload for clothing
-    const itemToAdd = isClothing ? { ...product, selectedSize } : product
+    if (isPerfume && !selectedVolume) {
+      // require volume selection for perfumes
+      alert('Please select a bottle size before adding to cart.')
+      setIsAdding(false)
+      return
+    }
+    // include selectedSize/selectedVolume and current price in item payload
+    const itemToAdd = isClothing 
+      ? { ...product, selectedSize, price: priceNum, originalPrice: originalPriceNum }
+      : isPerfume
+      ? { ...product, selectedVolume, price: priceNum, originalPrice: originalPriceNum }
+      : product
     // Debug log: inspect item sent to cart
     console.log('Adding to cart:', itemToAdd)
     addItem(itemToAdd, quantity)
@@ -238,7 +469,9 @@ export default function ProductDetail({ productId }) {
               {product.inStock ? (
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-green-600">In Stock ({product.stockCount} available)</span>
+                  <span className="text-sm text-green-600">
+                    In Stock{product.stockCount != null ? ` (${product.stockCount} available)` : ''}
+                  </span>
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
@@ -262,6 +495,22 @@ export default function ProductDetail({ productId }) {
                       onClick={() => setSelectedSize(s)}
                       className={`px-3 py-2 border rounded text-sm ${selectedSize === s ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
                       {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {isPerfume && (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium">Bottle Size:</span>
+                <div className="inline-flex items-center space-x-2">
+                  {volumes.map((vol) => (
+                    <button
+                      key={vol}
+                      type="button"
+                      onClick={() => setSelectedVolume(vol)}
+                      className={`px-3 py-2 border rounded text-sm ${selectedVolume === vol ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
+                      {vol}
                     </button>
                   ))}
                 </div>
@@ -365,6 +614,12 @@ export default function ProductDetail({ productId }) {
             <div className="mt-8">
               <h4 className="font-semibold text-foreground mb-4">Specifications</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {isPerfume && selectedVolume && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <span className="font-medium text-foreground">Volume</span>
+                    <span className="text-muted-foreground">{selectedVolume}</span>
+                  </div>
+                )}
                 {Object.entries(specifications).map(([key, value]) => (
                   <div key={key} className="flex justify-between py-2 border-b border-border">
                     <span className="font-medium text-foreground">{key}</span>

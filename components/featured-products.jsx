@@ -36,13 +36,13 @@ const featuredProducts = [
     reviews: 156,
   },
   {
-    id: 4,
-    name: "Bluetooth Speaker",
-    price: 79.99,
-    originalPrice: 99.99,
-    image: "/bluetooth-speaker.png",
-    rating: 4.6,
-    reviews: 203,
+    id: 9,
+    name: "Janan Sports Perfume",
+    price: 2499,
+    originalPrice: 2999,
+    image: "/janan-sports/janan-sports-new.jpg",
+    rating: 4.7,
+    reviews: 128,
   },
 ]
 
