@@ -156,7 +156,7 @@ export default function FAQ() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl font-bold text-primary mb-4">
             Frequently Asked Questions
           </h1>
           <p className="text-xl text-muted-foreground">
@@ -171,7 +171,7 @@ export default function FAQ() {
             return (
               <Card key={category.category} className="overflow-hidden pt-4">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-lg">
+                  <CardTitle className="flex items-center gap-3 text-lg text-primary">
                     <Icon className="h-5 w-5 text-primary" />
                     {category.category}
                   </CardTitle>
@@ -216,7 +216,7 @@ export default function FAQ() {
         <Card className="mt-12">
           <CardContent className="p-8 text-center">
             <HelpCircle className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Still Have Questions?</h3>
+            <h3 className="text-xl font-semibold text-primary mb-2">Still Have Questions?</h3>
             <p className="text-muted-foreground mb-6">
               Can't find what you're looking for? Our customer support team is here to help!
             </p>
@@ -228,7 +228,7 @@ export default function FAQ() {
                 </a>
               </Button>
               <Button variant="outline" asChild>
-                <a href="tel:+923001234567">
+                <a href="tel:03392351135">
                   <Phone className="h-4 w-4 mr-2" />
                   Call Us
                 </a>

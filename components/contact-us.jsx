@@ -15,7 +15,7 @@ export default function ContactUs() {
       </div>
 
       <div className="container mx-auto px-8 sm:px-10 lg:px-16 py-12">
-        <h1 className="text-3xl md:text-4xl font-semibold text-center mb-4">Contact</h1>
+        <h1 className="text-3xl md:text-4xl font-semibold text-center text-primary mb-4">Contact</h1>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10">
           We’d love to hear from you! Whether you have a question about our products, need assistance with your order, or want to share feedback, we’re here to help.
         </p>
@@ -23,7 +23,7 @@ export default function ContactUs() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left: Store info */}
           <div>
-            <h2 className="text-xl font-semibold mb-4">Visit Our Store</h2>
+            <h2 className="text-xl font-semibold text-primary mb-4">Visit Our Store</h2>
 
             <div className="space-y-4 text-sm text-gray-700">
               <div>
@@ -39,7 +39,7 @@ export default function ContactUs() {
                   <svg className="w-4 h-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h2.2a2 2 0 011.7.95l1.2 2.3a2 2 0 01-.45 2.3L8.09 10.91a16 16 0 006 6l1.05-1.05a2 2 0 012.11-.45c.96.39 1.98.65 3.03.77A2 2 0 0122 16.92V21a2 2 0 01-2 2 19 19 0 01-17-18z"/></svg>
                   <span>Phone</span>
                 </h3>
-                <p className="mt-1 text-gray-600"><a href="tel:03108548943" className="font-semibold text-gray-800">0310-8548943</a></p>
+                <p className="mt-1 text-gray-600"><a href="tel:03392351135" className="font-semibold text-gray-800">0339-2351135</a></p>
               </div>
 
               <div>
@@ -47,7 +47,7 @@ export default function ContactUs() {
                   <svg className="w-4 h-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.5 5L21 8m0 8H3a2 2 0 01-2-2V8a2 2 0 012-2h18a2 2 0 012 2v6a2 2 0 01-2 2z"/></svg>
                   <span>Email</span>
                 </h3>
-                <p className="mt-1 text-gray-600"><a href="mailto:support@zenifyexpress.com" className="font-semibold text-gray-800">support@zenifyexpress.com</a></p>
+                <p className="mt-1 text-gray-600"><a href="mailto:support@zenifyexpress.com" className="font-semibold text-gray-800">support@styleways.pk</a></p>
               </div>
 
               <div>
@@ -69,7 +69,7 @@ export default function ContactUs() {
 
           {/* Right: Contact form */}
           <div>
-            <h2 className="text-xl font-semibold mb-4">Send Us a Message</h2>
+            <h2 className="text-xl font-semibold text-primary mb-4">Send Us a Message</h2>
             <p className="text-sm text-gray-600 mb-4">For any inquiries, simply fill out the form below, and we'll get back to you as soon as possible.</p>
 
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>

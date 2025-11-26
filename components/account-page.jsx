@@ -46,7 +46,7 @@ export default function AccountPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">My Account</h1>
+          <h1 className="text-3xl font-bold text-primary mb-2">My Account</h1>
           <p className="text-muted-foreground">Manage your account and view your orders</p>
         </div>
 
@@ -58,7 +58,7 @@ export default function AccountPage() {
                 <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <User className="h-10 w-10 text-primary" />
                 </div>
-                <CardTitle>{user.name}</CardTitle>
+                <CardTitle className="text-primary">{user.name}</CardTitle>
                 <CardDescription>{user.email}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -106,8 +106,8 @@ export default function AccountPage() {
             {/* Current Cart */}
             {cartItemCount > 0 && (
               <Card>
-                <CardHeader>
-                  <CardTitle>Current Cart</CardTitle>
+              <CardHeader>
+                <CardTitle className="text-primary">Current Cart</CardTitle>
                   <CardDescription>You have {cartItemCount} items in your cart</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -130,7 +130,7 @@ export default function AccountPage() {
             {/* Recent Orders */}
             <Card>
               <CardHeader>
-                <CardTitle>Recent Orders</CardTitle>
+                <CardTitle className="text-primary">Recent Orders</CardTitle>
                 <CardDescription>Your order history</CardDescription>
               </CardHeader>
               <CardContent>
@@ -148,7 +148,7 @@ export default function AccountPage() {
             {/* Account Settings */}
             <Card>
               <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
+                <CardTitle className="text-primary">Account Settings</CardTitle>
                 <CardDescription>Manage your account preferences</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

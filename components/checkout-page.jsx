@@ -437,7 +437,7 @@ export default function CheckoutPage() {
 			<div className="max-w-6xl mx-auto">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-foreground mb-2">Checkout</h1>
+					<h1 className="text-3xl font-bold text-primary mb-2">Checkout</h1>
 					<p className="text-muted-foreground">Complete your purchase</p>
 				</div>
 
@@ -465,7 +465,7 @@ export default function CheckoutPage() {
 									<div className="ml-3 hidden sm:block">
 										<p
 											className={`text-sm font-medium ${
-												isActive ? "text-primary" : isCompleted ? "text-foreground" : "text-muted-foreground"
+												isActive ? "text-primary" : isCompleted ? "text-primary" : "text-muted-foreground"
 											}`}
 										>
 											{step.title}
@@ -485,9 +485,9 @@ export default function CheckoutPage() {
 					<div className="lg:col-span-2">
 						{/* Shipping Information */}
 						{currentStep === 0 && (
-							<Card className="pt-6 pb-6">
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
+								<Card className="pt-6 pb-6">
+									<CardHeader>
+										<CardTitle className="flex items-center gap-2 text-primary">
 										<Truck className="h-5 w-5" />
 										Shipping Information
 									</CardTitle>
@@ -601,7 +601,7 @@ export default function CheckoutPage() {
 							<div className="space-y-6">
 								<Card className="!pt-6 !pb-6">
 									<CardHeader>
-										<CardTitle>Review Your Order</CardTitle>
+										<CardTitle className="text-primary">Review Your Order</CardTitle>
 									</CardHeader>
 									<CardContent className="space-y-4">
 										{items.map((item) => (
@@ -627,7 +627,7 @@ export default function CheckoutPage() {
 								<div className="grid grid-cols-1 md:grid-cols-1 gap-6">
 									<Card className="pt-6 pb-6">
 										<CardHeader>
-											<CardTitle className="text-lg">Shipping Address</CardTitle>
+											<CardTitle className="text-lg text-primary">Shipping Address</CardTitle>
 										</CardHeader>
 										<CardContent>
 											<div className="text-sm space-y-1">
@@ -684,7 +684,7 @@ export default function CheckoutPage() {
 					<div className="lg:col-span-1">
 						<Card className="pt-6 pb-4">
 							<CardHeader>
-								<CardTitle>Order Summary</CardTitle>
+								<CardTitle className="text-primary">Order Summary</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div className="space-y-2">

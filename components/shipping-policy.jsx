@@ -2,11 +2,11 @@ export default function ShippingPolicy() {
   return (
     <div className="bg-white text-gray-900">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-2xl md:text-3xl font-medium text-center mb-8">Shipping Privacy</h1>
+        <h1 className="text-2xl md:text-3xl font-medium text-center text-primary mb-8">Shipping Privacy</h1>
 
         <div className="max-w-4xl mx-auto text-sm text-gray-700 space-y-6">
           <section>
-            <h3 className="font-semibold text-lg mb-2">Order Processing Time</h3>
+            <h3 className="font-semibold text-lg text-primary mb-2">Order Processing Time</h3>
             <ul className="list-disc list-inside space-y-2">
               <li>All orders are processed within <strong>5 business days</strong> (excluding weekends and holidays).</li>
               <li>If there are any delays due to high order volumes or unforeseen circumstances, we will notify you via email.</li>
@@ -14,7 +14,7 @@ export default function ShippingPolicy() {
           </section>
 
           <section>
-            <h3 className="font-semibold text-lg mb-2">Shipping Rates & Delivery Estimates</h3>
+            <h3 className="font-semibold text-lg text-primary mb-2">Shipping Rates & Delivery Estimates</h3>
             <p className="mb-2">Shipping charges for your order will be calculated and displayed at checkout. Estimated delivery times:</p>
             <ul className="list-disc list-inside space-y-2">
               <li><strong>Standard Shipping:</strong> 3–5 business days.</li>
@@ -24,7 +24,7 @@ export default function ShippingPolicy() {
           </section>
 
           <section>
-            <h3 className="font-semibold text-lg mb-2">Order Tracking</h3>
+            <h3 className="font-semibold text-lg text-primary mb-2">Order Tracking</h3>
             <ul className="list-disc list-inside space-y-2">
               <li>Once your order has shipped, you will receive a tracking number via email.</li>
               <li>You can track your order using the provided tracking link from the carrier.</li>
@@ -32,7 +32,7 @@ export default function ShippingPolicy() {
           </section>
 
           <section>
-            <h3 className="font-semibold text-lg mb-2">Shipping Issues & Lost Packages</h3>
+            <h3 className="font-semibold text-lg text-primary mb-2">Shipping Issues & Lost Packages</h3>
             <p className="mb-2">We are not responsible for lost or stolen packages once they have been marked as delivered by the carrier. If your package is missing or delayed:</p>
             <ul className="list-disc list-inside space-y-2">
               <li>Check the tracking information and delivery location first.</li>
@@ -41,12 +41,12 @@ export default function ShippingPolicy() {
           </section>
 
           <section>
-            <h3 className="font-semibold text-lg mb-2">Returns & Refunds</h3>
+            <h3 className="font-semibold text-lg text-primary mb-2">Returns & Refunds</h3>
             <p className="mb-2">Please refer to our <a href="/returns" className="font-semibold text-gray-900">Return Policy</a> for details on returns and refunds related to shipping issues.</p>
           </section>
 
           <section>
-            <h3 className="font-semibold text-lg mb-2">Contact</h3>
+            <h3 className="font-semibold text-lg text-primary mb-2">Contact</h3>
             <p>If you have any shipping related inquiries, contact our support team at:</p>
             <div className="mt-3 space-y-2 text-sm text-gray-700">
               <p className="flex items-center space-x-2">

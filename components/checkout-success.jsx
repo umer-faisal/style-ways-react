@@ -24,7 +24,7 @@ export default function CheckoutSuccess() {
         </div>
 
         {/* Success Message */}
-        <h1 className="text-3xl font-bold text-foreground mb-4">Order Placed Successfully!</h1>
+        <h1 className="text-3xl font-bold text-primary mb-4">Order Placed Successfully!</h1>
         <p className="text-muted-foreground mb-8 text-lg">
           Thank you for your purchase. Your order has been confirmed and will be shipped soon.
         </p>
@@ -32,7 +32,7 @@ export default function CheckoutSuccess() {
         {/* Order Details Card */}
         <Card className="mb-8 pt-4 pb-4">
           <CardHeader>
-            <CardTitle className="flex items-center justify-center gap-2">
+            <CardTitle className="flex items-center justify-center gap-2 text-primary">
               <Receipt className="h-5 w-5" />
               Order Details
             </CardTitle>
@@ -59,7 +59,7 @@ export default function CheckoutSuccess() {
         {/* What's Next */}
         <Card className="mb-8 pt-4 pb-4">
           <CardHeader>
-            <CardTitle className="flex items-center justify-center gap-2">
+            <CardTitle className="flex items-center justify-center gap-2 text-primary">
               <Package className="h-5 w-5" />
               What's Next?
             </CardTitle>
@@ -121,8 +121,8 @@ export default function CheckoutSuccess() {
         </div>
 
         {/* Support */}
-        <div className="mt-12 p-6 bg-muted/50 rounded-lg">
-          <h3 className="font-semibold mb-2">Need Help?</h3>
+            <div className="mt-12 p-6 bg-muted/50 rounded-lg">
+          <h3 className="font-semibold text-primary mb-2">Need Help?</h3>
           <p className="text-sm text-muted-foreground mb-4">
             If you have any questions about your order, our customer support team is here to help.
           </p>

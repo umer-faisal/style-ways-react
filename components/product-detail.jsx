@@ -432,7 +432,7 @@ export default function ProductDetail({ productId }) {
             <Badge variant="outline" className="mb-2">
               {product.category}
             </Badge>
-            <h1 className="text-3xl font-bold text-foreground mb-2">{product.name}</h1>
+            <h1 className="text-3xl font-bold text-primary mb-2">{product.name}</h1>
 
             {/* Rating */}
             <div className="flex items-center space-x-2 mb-4">
@@ -551,7 +551,7 @@ export default function ProductDetail({ productId }) {
 
           {/* Features */}
           <div>
-            <h3 className="font-semibold text-foreground mb-3">Key Features</h3>
+            <h3 className="font-semibold text-primary mb-3">Key Features</h3>
             <ul className="space-y-2">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-center space-x-2">
@@ -612,7 +612,7 @@ export default function ProductDetail({ productId }) {
             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
             <div className="mt-8">
-              <h4 className="font-semibold text-foreground mb-4">Specifications</h4>
+              <h4 className="font-semibold text-primary mb-4">Specifications</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {isPerfume && selectedVolume && (
                   <div className="flex justify-between py-2 border-b border-border">

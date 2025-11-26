@@ -28,7 +28,7 @@ export default function CartPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-2xl mx-auto text-center">
           <ShoppingCart className="h-24 w-24 text-muted-foreground mx-auto mb-6" />
-          <h1 className="text-3xl font-bold text-foreground mb-4">Your cart is empty</h1>
+          <h1 className="text-3xl font-bold text-primary mb-4">Your cart is empty</h1>
           <p className="text-muted-foreground mb-8">
             Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
           </p>
@@ -46,7 +46,7 @@ export default function CartPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">Shopping Cart</h1>
         <p className="text-gray-800">{itemCount} items in your cart</p>
       </div>
 

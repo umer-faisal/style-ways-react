@@ -35,7 +35,7 @@ export default function CartDrawer() {
 
       <SheetContent className="w-full sm:max-w-lg">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
+          <SheetTitle className="flex items-center gap-2 text-primary">
             <ShoppingBag className="h-5 w-5" />
             Shopping Cart ({itemCount} items)
           </SheetTitle>
@@ -45,7 +45,7 @@ export default function CartDrawer() {
           {items.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
               <ShoppingCart className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">Your cart is empty</h3>
+              <h3 className="text-lg font-semibold text-primary mb-2">Your cart is empty</h3>
               <p className="text-muted-foreground mb-6">Add some products to get started</p>
               <Button onClick={() => setIsOpen(false)} asChild>
                 <Link href="/products">Continue Shopping</Link>
@@ -67,7 +67,7 @@ export default function CartDrawer() {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-foreground truncate">{item.name}</h4>
+                      <h4 className="text-sm font-medium text-primary truncate">{item.name}</h4>
                         <p className="text-sm text-muted-foreground">Rs{Number(item.price ?? 0).toFixed(2)} each</p>
 
                         <div className="flex items-center space-x-2 mt-2">

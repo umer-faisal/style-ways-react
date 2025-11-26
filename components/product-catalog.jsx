@@ -90,7 +90,7 @@ const allProducts = [
     name: "David Backham Perfume",
     price: 2199,
     originalPrice: 2699,
-    image: "/david-backham/david-bekham-new.jpg",
+    image: "/david-backham/david-backham-new.jpg",
     rating: 4.5,
     reviews: 95,
     category: "Perfumes",
@@ -147,7 +147,7 @@ export default function ProductCatalog() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-black mb-2">All Products</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">All Products</h1>
         <p className="text-gray-800">Discover our complete collection of quality products</p>
       </div>
 
