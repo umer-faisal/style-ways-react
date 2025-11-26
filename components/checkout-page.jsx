@@ -12,6 +12,7 @@ import { Badge } from "./ui/badge"
 import { ArrowLeft, ArrowRight, CreditCard, Truck, Shield, CheckCircle, MapPin, Mail, Phone } from "lucide-react"
 import { useRouter } from "next/navigation"
 import emailjs from "emailjs-com"
+import { useFormik } from "formik"
 
 
 
@@ -66,6 +67,29 @@ export default function CheckoutPage() {
 	const [paymentInfo, setPaymentInfo] = useState(defaultPaymentInfo)
 	const [isHydrated, setIsHydrated] = useState(false)
 	const [isCartHydrated, setIsCartHydrated] = useState(false)
+
+	// Formik for shipping form
+	const shippingForm = useFormik({
+		initialValues: defaultShippingInfo,
+		enableReinitialize: true,
+		validate: (values) => {
+			const newErrors = {}
+			const required = ["firstName", "lastName", "email", "phone", "address", "city", "state", "zipCode"]
+
+			required.forEach((field) => {
+				if (!values[field]) {
+					newErrors[field] = "This field is required"
+				}
+			})
+
+			if (values.email && !/\S+@\S+\.\S+/.test(values.email)) {
+				newErrors.email = "Please enter a valid email address"
+			}
+
+			return newErrors
+		},
+		onSubmit: () => {},
+	})
 
 	// Load from localStorage helper (client-side only)
 	const loadFromLocalStorage = (key, defaultValue) => {
@@ -151,42 +175,45 @@ export default function CheckoutPage() {
 		return () => clearTimeout(timeoutId)
 	}, [paymentInfo, isHydrated])
 
+	// Sync Formik values into local shippingInfo state (used elsewhere)
+	useEffect(() => {
+		setShippingInfo(shippingForm.values)
+	}, [shippingForm.values])
+
 	// Populate user data after hydration to prevent hydration mismatch
 	// Only populate if fields are empty (don't overwrite saved data)
 	useEffect(() => {
 		if (user && isAuthenticated) {
-			setShippingInfo(prev => {
-				// Only update if fields are empty
-				if (!prev.firstName && !prev.lastName && !prev.email) {
-					return {
-						...prev,
-						firstName: user?.name?.split(" ")[0] || "",
-						lastName: user?.name?.split(" ")[1] || "",
-						email: user?.email || "",
-					}
-				}
-				return prev
-			})
-		}
-	}, [user, isAuthenticated])
-
-	const validateShipping = useCallback(() => {
-		const newErrors = {}
-		// firstName and lastName are not in UI, so removed from required fields
-		const required = ["email", "phone", "address", "city", "state", "zipCode"]
-
-		required.forEach((field) => {
-			if (!shippingInfo[field]) {
-				newErrors[field] = "This field is required"
+			const current = shippingForm.values
+			// Only update if fields are empty
+			if (!current.firstName && !current.lastName && !current.email) {
+				shippingForm.setValues({
+					...current,
+					firstName: user?.name?.split(" ")[0] || "",
+					lastName: user?.name?.split(" ")[1] || "",
+					email: user?.email || "",
+				})
 			}
-		})
-
-		if (shippingInfo.email && !/\S+@\S+\.\S+/.test(shippingInfo.email)) {
-			newErrors.email = "Please enter a valid email address"
 		}
+	}, [user, isAuthenticated, shippingForm])
 
-		return { isValid: Object.keys(newErrors).length === 0, errors: newErrors }
-	}, [shippingInfo])
+	const validateShipping = useCallback(async () => {
+		const validationErrors = await shippingForm.validateForm()
+		shippingForm.setTouched(
+			{
+				firstName: true,
+				lastName: true,
+				email: true,
+				phone: true,
+				address: true,
+				city: true,
+				state: true,
+				zipCode: true,
+			},
+			false
+		)
+		return { isValid: Object.keys(validationErrors).length === 0, errors: validationErrors }
+	}, [shippingForm])
 
 	const validatePayment = () => {
 		const newErrors = {}
@@ -206,101 +233,19 @@ export default function CheckoutPage() {
 		console.log("handleNext called, currentStep:", currentStep)
 		
 		if (currentStep === 0) {
-			const validation = validateShipping()
+			const validation = await validateShipping()
 			if (!validation.isValid) {
 				console.log("Validation failed:", validation.errors)
-				setErrors(validation.errors)
 				return
 			}
 
-			console.log("Validation passed, starting order placement...")
-			// On shipping step, place order directly with EmailJS
-			setIsProcessing(true)
-
-			// Ensure any items that require a size have one selected
-			for (const item of items) {
-				if (Object.prototype.hasOwnProperty.call(item, 'selectedSize') && !item.selectedSize) {
-					alert(`Please select a size for "${item.name}" before placing the order.`)
-					setIsProcessing(false)
-					return
-				}
-			}
-
-			// Prepare EmailJS template parameters
-			const templateParams = {
-				// firstName and lastName not in UI, so using default values
-				firstName: shippingInfo.firstName || "Customer",
-				lastName: shippingInfo.lastName || "",
-				email: shippingInfo.email,
-				phone: shippingInfo.phone,
-				address: shippingInfo.address,
-				city: shippingInfo.city,
-				state: shippingInfo.state,
-				zipCode: shippingInfo.zipCode,
-				country: shippingInfo.country,
-				orderItems: items
-					.map((item) => {
-						const price = Number(item.price || 0)
-						const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
-						return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
-					})
-					.join("\n"),
-				orderItemsHtml: items
-					.map((item) => {
-						const price = Number(item.price || 0)
-						const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
-						return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
-					})
-					.join("<br/>"),
-				itemsJson: JSON.stringify(items, null, 2),
-				total: total.toFixed(0),
-			}
-
-			console.log("Template params prepared:", templateParams)
-
-			try {
-				const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-				const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-				const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-
-				console.log("EmailJS config:", { serviceId: !!serviceId, templateId: !!templateId, publicKey: !!publicKey })
-
-				if (!serviceId || !templateId || !publicKey) {
-					throw new Error("EmailJS configuration is missing. Please check your environment variables.")
-				}
-
-				console.log("Sending EmailJS email...")
-				const result = await emailjs.send(
-					serviceId,
-					templateId,
-					templateParams,
-					publicKey
-				)
-				console.log("EmailJS success:", result)
-
-				// Clear checkout form data from localStorage after successful order
-				if (typeof window !== "undefined") {
-					localStorage.removeItem("checkout_shippingInfo")
-					localStorage.removeItem("checkout_billingInfo")
-					localStorage.removeItem("checkout_paymentInfo")
-					localStorage.removeItem("checkout_currentStep")
-				}
-
-				console.log("Clearing cart and redirecting...")
-				clearCart()
-				// Navigate to success page after successful EmailJS call
-				router.push("/success")
-				setIsProcessing(false)
-				return
-			} catch (error) {
-				console.error("EmailJS error:", error)
-				alert(`Failed to send order confirmation: ${error.message || "Please try again."}`)
-				setIsProcessing(false)
-				return
-			}
+			// Move from Shipping step to Review step
+			setErrors({})
+			setCurrentStep(1)
+			return
 		}
 
-		// Only move to next step if not on step 0 (step 0 places order directly)
+		// For any future extra steps (if added)
 		if (currentStep > 0 && currentStep < CHECKOUT_STEPS.length - 1) {
 			// Clear errors before moving to next step
 			setErrors({})
@@ -310,7 +255,7 @@ export default function CheckoutPage() {
 				return nextStep
 			})
 		}
-	}, [currentStep, validateShipping, shippingInfo, items, total, clearCart, router])
+	}, [currentStep, validateShipping])
 
 	const handleBack = useCallback(() => {
 		if (currentStep > 0) {
@@ -322,10 +267,15 @@ export default function CheckoutPage() {
 	const handlePlaceOrder = async () => {
 		setIsProcessing(true)
 
-		// Ensure any items that require a size have one selected
+		// Ensure any items that require a size/volume have it selected
 		for (const item of items) {
 			if (Object.prototype.hasOwnProperty.call(item, 'selectedSize') && !item.selectedSize) {
 				alert(`Please select a size for "${item.name}" before placing the order.`)
+				setIsProcessing(false)
+				return
+			}
+			if (Object.prototype.hasOwnProperty.call(item, 'selectedVolume') && !item.selectedVolume) {
+				alert(`Please select a bottle size for "${item.name}" before placing the order.`)
 				setIsProcessing(false)
 				return
 			}
@@ -345,16 +295,22 @@ export default function CheckoutPage() {
 			orderItems: items
 				.map((item) => {
 					const price = Number(item.price || 0)
-					const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
-					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
+					const details = []
+					if (item.selectedSize) details.push(`Size: ${item.selectedSize}`)
+					if (item.selectedVolume) details.push(`Volume: ${item.selectedVolume}`)
+					const detailsText = details.length ? ` - ${details.join(" | ")}` : ""
+					return `${item.name}${detailsText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
 				})
 				.join("\n"),
 			// HTML-safe version for EmailJS HTML templates (use {{{orderItemsHtml}}} in template)
 			orderItemsHtml: items
 				.map((item) => {
 					const price = Number(item.price || 0)
-					const sizeText = item.selectedSize ? ` - Size: ${item.selectedSize}` : ''
-					return `${item.name}${sizeText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
+					const details = []
+					if (item.selectedSize) details.push(`Size: ${item.selectedSize}`)
+					if (item.selectedVolume) details.push(`Volume: ${item.selectedVolume}`)
+					const detailsText = details.length ? ` - ${details.join(" | ")}` : ""
+					return `${item.name}${detailsText} (x${item.quantity}) - Rs ${(price * Number(item.quantity)).toFixed(0)}`
 				})
 				.join("<br/>") ,
 			// structured data for debugging
@@ -483,38 +439,46 @@ export default function CheckoutPage() {
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					{/* Main Content */}
 					<div className="lg:col-span-2">
-						{/* Shipping Information */}
+						{/* Shipping Information (Formik-powered) */}
 						{currentStep === 0 && (
 								<Card className="pt-6 pb-6">
 									<CardHeader>
 										<CardTitle className="flex items-center gap-2 text-primary">
-										<Truck className="h-5 w-5" />
-										Shipping Information
-									</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-4">
-									{/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+											<Truck className="h-5 w-5" />
+											Shipping Information
+										</CardTitle>
+									</CardHeader>
+									<CardContent className="space-y-4">
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										<div>
 											<Label htmlFor="firstName">First Name</Label>
 											<Input
 												id="firstName"
-												value={shippingInfo.firstName}
-												onChange={(e) => handleShippingChange("firstName", e.target.value)}
-												className={errors.firstName ? "border-destructive" : ""}
+												name="firstName"
+												value={shippingForm.values.firstName}
+												onChange={shippingForm.handleChange}
+												onBlur={shippingForm.handleBlur}
+												className={shippingForm.touched.firstName && shippingForm.errors.firstName ? "border-destructive" : ""}
 											/>
-											{errors.firstName && <p className="text-sm text-destructive mt-1">{errors.firstName}</p>}
+											{shippingForm.touched.firstName && shippingForm.errors.firstName && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.firstName}</p>
+											)}
 										</div>
 										<div>
 											<Label htmlFor="lastName">Last Name</Label>
 											<Input
 												id="lastName"
-												value={shippingInfo.lastName}
-												onChange={(e) => handleShippingChange("lastName", e.target.value)}
-												className={errors.lastName ? "border-destructive" : ""}
+												name="lastName"
+												value={shippingForm.values.lastName}
+												onChange={shippingForm.handleChange}
+												onBlur={shippingForm.handleBlur}
+												className={shippingForm.touched.lastName && shippingForm.errors.lastName ? "border-destructive" : ""}
 											/>
-											{errors.lastName && <p className="text-sm text-destructive mt-1">{errors.lastName}</p>}
+											{shippingForm.touched.lastName && shippingForm.errors.lastName && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.lastName}</p>
+											)}
 										</div>
-									</div> */}
+									</div>
 
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										<div>
@@ -523,13 +487,19 @@ export default function CheckoutPage() {
 												<Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 												<Input
 													id="email"
+													name="email"
 													type="email"
-													value={shippingInfo.email}
-													onChange={(e) => handleShippingChange("email", e.target.value)}
-													className={`pl-10 ${errors.email ? "border-destructive" : ""}`}
+													value={shippingForm.values.email}
+													onChange={shippingForm.handleChange}
+													onBlur={shippingForm.handleBlur}
+													className={`pl-10 ${
+														shippingForm.touched.email && shippingForm.errors.email ? "border-destructive" : ""
+													}`}
 												/>
 											</div>
-											{errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
+											{shippingForm.touched.email && shippingForm.errors.email && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.email}</p>
+											)}
 										</div>
 										<div>
 											<Label htmlFor="phone">Phone</Label>
@@ -537,12 +507,18 @@ export default function CheckoutPage() {
 												<Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 												<Input
 													id="phone"
-													value={shippingInfo.phone}
-													onChange={(e) => handleShippingChange("phone", e.target.value)}
-													className={`pl-10 ${errors.phone ? "border-destructive" : ""}`}
+													name="phone"
+													value={shippingForm.values.phone}
+													onChange={shippingForm.handleChange}
+													onBlur={shippingForm.handleBlur}
+													className={`pl-10 ${
+														shippingForm.touched.phone && shippingForm.errors.phone ? "border-destructive" : ""
+													}`}
 												/>
 											</div>
-											{errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
+											{shippingForm.touched.phone && shippingForm.errors.phone && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.phone}</p>
+											)}
 										</div>
 									</div>
 
@@ -552,12 +528,18 @@ export default function CheckoutPage() {
 											<MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 											<Input
 												id="address"
-												value={shippingInfo.address}
-												onChange={(e) => handleShippingChange("address", e.target.value)}
-												className={`pl-10 ${errors.address ? "border-destructive" : ""}`}
+												name="address"
+												value={shippingForm.values.address}
+												onChange={shippingForm.handleChange}
+												onBlur={shippingForm.handleBlur}
+												className={`pl-10 ${
+													shippingForm.touched.address && shippingForm.errors.address ? "border-destructive" : ""
+												}`}
 											/>
 										</div>
-										{errors.address && <p className="text-sm text-destructive mt-1">{errors.address}</p>}
+										{shippingForm.touched.address && shippingForm.errors.address && (
+											<p className="text-sm text-destructive mt-1">{shippingForm.errors.address}</p>
+										)}
 									</div>
 
 									<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -565,31 +547,43 @@ export default function CheckoutPage() {
 											<Label htmlFor="city">City</Label>
 											<Input
 												id="city"
-												value={shippingInfo.city}
-												onChange={(e) => handleShippingChange("city", e.target.value)}
-												className={errors.city ? "border-destructive" : ""}
+												name="city"
+												value={shippingForm.values.city}
+												onChange={shippingForm.handleChange}
+												onBlur={shippingForm.handleBlur}
+												className={shippingForm.touched.city && shippingForm.errors.city ? "border-destructive" : ""}
 											/>
-											{errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
+											{shippingForm.touched.city && shippingForm.errors.city && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.city}</p>
+											)}
 										</div>
 										<div>
 											<Label htmlFor="state">State</Label>
 											<Input
 												id="state"
-												value={shippingInfo.state}
-												onChange={(e) => handleShippingChange("state", e.target.value)}
-												className={errors.state ? "border-destructive" : ""}
+												name="state"
+												value={shippingForm.values.state}
+												onChange={shippingForm.handleChange}
+												onBlur={shippingForm.handleBlur}
+												className={shippingForm.touched.state && shippingForm.errors.state ? "border-destructive" : ""}
 											/>
-											{errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
+											{shippingForm.touched.state && shippingForm.errors.state && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.state}</p>
+											)}
 										</div>
 										<div>
 											<Label htmlFor="zipCode">ZIP Code</Label>
 											<Input
 												id="zipCode"
-												value={shippingInfo.zipCode}
-												onChange={(e) => handleShippingChange("zipCode", e.target.value)}
-												className={errors.zipCode ? "border-destructive" : ""}
+												name="zipCode"
+												value={shippingForm.values.zipCode}
+												onChange={shippingForm.handleChange}
+												onBlur={shippingForm.handleBlur}
+												className={shippingForm.touched.zipCode && shippingForm.errors.zipCode ? "border-destructive" : ""}
 											/>
-											{errors.zipCode && <p className="text-sm text-destructive mt-1">{errors.zipCode}</p>}
+											{shippingForm.touched.zipCode && shippingForm.errors.zipCode && (
+												<p className="text-sm text-destructive mt-1">{shippingForm.errors.zipCode}</p>
+											)}
 										</div>
 									</div>
 								</CardContent>
@@ -615,10 +609,13 @@ export default function CheckoutPage() {
 													<h4 className="font-medium">{item.name}</h4>
 													<p className="text-sm text-muted-foreground">
 														{item.selectedSize && <span className="mr-2">Size: {item.selectedSize} •</span>}
+														{item.selectedVolume && <span className="mr-2">Volume: {item.selectedVolume} •</span>}
 														Qty: {item.quantity}
 													</p>
 												</div>
-												<p className="font-semibold">Rs {(Number(item.price) * Number(item.quantity)).toFixed(0)}</p>
+												<p className="font-semibold">
+													Rs {(Number(item.price) * Number(item.quantity)).toFixed(0)}
+												</p>
 											</div>
 										))}
 									</CardContent>
@@ -662,7 +659,12 @@ export default function CheckoutPage() {
 
 						{/* Navigation Buttons */}
 						<div className="flex justify-between mt-8">
-							<Button variant="outline" onClick={handleBack} disabled={currentStep === 0} className= "cursor-pointer">
+							<Button
+								variant="outline"
+								onClick={currentStep === 0 ? () => router.push("/cart") : handleBack}
+								disabled={isProcessing}
+								className="cursor-pointer"
+							>
 								<ArrowLeft className="h-4 w-4 mr-2" />
 								Back
 							</Button>
