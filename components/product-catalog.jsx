@@ -144,12 +144,32 @@ export default function ProductCatalog() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">All Products</h1>
-        <p className="text-gray-800">Discover our complete collection of quality products</p>
+    <div>
+      {/* Full Screen Banner */}
+      <div className="relative w-full overflow-hidden">
+        <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh]">
+          <img
+            src="/product-catalog-new.png"
+            alt="StyleWays Banner"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40 flex items-center justify-center">
+            <div className="text-center px-4 sm:px-6 lg:px-8">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-3 sm:mb-4">StyleWays</h2>
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/90 mb-3 sm:mb-4">Quality Fashion & Lifestyle Products</p>
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 max-w-2xl mx-auto">Discover premium fashion, tech gadgets, and home essentials at unbeatable prices</p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Products Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-primary mb-2">All Products</h1>
+          <p className="text-gray-800">Discover our complete collection of quality products</p>
+        </div>
 
       {/* Search and Filters */}
       <div className="mb-8 space-y-4">
@@ -307,6 +327,7 @@ export default function ProductCatalog() {
           </Button>
         </div>
       )}
+      </div>
     </div>
   )
 }

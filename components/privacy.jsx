@@ -8,7 +8,7 @@ export default function Privacy() {
           <section>
             <h3 className="font-bold text-xl text-gray-800 mb-1">Introduction</h3>
             <p>
-              Welcome to Zenify Express! Your privacy is important to us, and we are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you visit our website, www.zenifyexpress.com.
+              Welcome to StyleWays! Your privacy is important to us, and we are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you visit our website, www.styleways.pk.
             </p>
           </section>
 
@@ -78,7 +78,7 @@ export default function Privacy() {
             <div className="mt-4 space-y-2 text-sm text-gray-800">
               <p className="flex items-center space-x-2">
                 <svg className="w-4 h-4 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.5 5L18 8m0 8H6a2 2 0 01-2-2V8a2 2 0 012-2h12a2 2 0 012 2v6a2 2 0 01-2 2z"></path></svg>
-                <span>Email: <a href="mailto:support@styleways.pk" className="font-semibold text-gray-800">support@zenifyexpress.com</a></span>
+                <span>Email: <a href="mailto:support@styleways.pk" className="font-semibold text-gray-800">support@styleways.pk</a></span>
               </p>
 
               <p className="flex items-center space-x-2">

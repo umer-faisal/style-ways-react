@@ -64,10 +64,10 @@ export default function About() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 text-center">
         <div className="grid grid-cols-4 sm:grid-cols-4 gap-3 justify-items-center">
-          <img src="/images/gallery1.jpg" alt="gallery 1" className="w-full h-32 object-cover rounded-md" />
-          <img src="/images/gallery2.jpg" alt="gallery 2" className="w-full h-32 object-cover rounded-md" />
-          <img src="/images/gallery3.jpg" alt="gallery 3" className="w-full h-32 object-cover rounded-md" />
-          <img src="/images/gallery4.jpg" alt="gallery 4" className="w-full h-32 object-cover rounded-md" />
+          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop" alt="Fashion Collection" className="w-full h-32 object-cover rounded-md" />
+          <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop" alt="Tech Gadgets" className="w-full h-32 object-cover rounded-md" />
+          <img src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=300&fit=crop" alt="Home Essentials" className="w-full h-32 object-cover rounded-md" />
+          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=300&fit=crop" alt="StyleWays Products" className="w-full h-32 object-cover rounded-md" />
         </div>
       </div>
     </div>

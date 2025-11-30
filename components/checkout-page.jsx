@@ -264,6 +264,14 @@ export default function CheckoutPage() {
 		}
 	}, [currentStep])
 
+	// Generate unique order ID
+	const generateOrderId = () => {
+		const timestamp = Date.now()
+		const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase()
+		const date = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+		return `STW-${date}-${randomStr}`
+	}
+
 	const handlePlaceOrder = async () => {
 		setIsProcessing(true)
 
@@ -281,7 +289,11 @@ export default function CheckoutPage() {
 			}
 		}
 
+		// Generate unique order ID
+		const orderId = generateOrderId()
+
 		const templateParams = {
+			orderId: orderId,
 			// firstName and lastName not in UI, so using default values
 			firstName: shippingInfo.firstName || "Customer",
 			lastName: shippingInfo.lastName || "",
@@ -348,8 +360,8 @@ export default function CheckoutPage() {
 			}
 
 			clearCart()
-			// navigate to the correct success page (hyphenated path)
-			router.push("/success")
+			// navigate to the correct success page with order ID
+			router.push(`/success?orderId=${orderId}`)
 		} catch (error) {
 			console.error("EmailJS error:", error)
 			alert("Failed to send order confirmation. Please try again.")

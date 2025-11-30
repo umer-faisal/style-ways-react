@@ -1,19 +1,39 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { CheckCircle, Package, ArrowRight, Home, Receipt } from "lucide-react"
 import Link from "next/link"
 
 export default function CheckoutSuccess() {
+  const searchParams = useSearchParams()
   const [orderNumber, setOrderNumber] = useState("")
 
   useEffect(() => {
-    // Generate a random order number
-    const randomOrderNumber = "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase()
-    setOrderNumber(randomOrderNumber)
-  }, [])
+    // Get order ID from URL params, or generate one if not present
+    const orderIdFromUrl = searchParams?.get("orderId")
+    if (orderIdFromUrl) {
+      setOrderNumber(orderIdFromUrl)
+      // Also save to localStorage for reference
+      if (typeof window !== "undefined") {
+        localStorage.setItem("lastOrderId", orderIdFromUrl)
+      }
+    } else {
+      // Fallback: try to get from localStorage or generate new
+      if (typeof window !== "undefined") {
+        const lastOrderId = localStorage.getItem("lastOrderId")
+        if (lastOrderId) {
+          setOrderNumber(lastOrderId)
+        } else {
+          // Generate a fallback order number (shouldn't happen in normal flow)
+          const fallbackOrderId = "STW-" + new Date().toISOString().slice(0, 10).replace(/-/g, '') + "-" + Math.random().toString(36).substring(2, 8).toUpperCase()
+          setOrderNumber(fallbackOrderId)
+        }
+      }
+    }
+  }, [searchParams])
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -39,8 +59,13 @@ export default function CheckoutSuccess() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-center">
-              <p className="text-sm text-muted-foreground">Order Number</p>
-              <p className="text-xl font-bold text-primary">{orderNumber}</p>
+              <p className="text-sm text-muted-foreground mb-2">Order ID</p>
+              <p className="text-2xl md:text-3xl font-bold text-primary tracking-wider bg-primary/10 py-3 px-6 rounded-lg inline-block">
+                {orderNumber || "Loading..."}
+              </p>
+              <p className="text-xs text-muted-foreground mt-3">
+                Please save this order ID for your records. A confirmation email has been sent to your email address.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">

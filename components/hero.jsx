@@ -6,7 +6,7 @@ import Link from 'next/link';
 const Hero = () => {
 	return (
 		<div 
-			className="relative w-full h-[500px] bg-[url('/herobanner/banner2.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden"
+			className="relative w-full h-[500px] bg-[url('/herobanner/banner3.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden"
 		>
 			{/* Overlay */}
 			<div className="absolute inset-0 bg-black/40 z-[1]" />
