@@ -12,24 +12,35 @@ export default function CheckoutSuccess() {
   const [orderNumber, setOrderNumber] = useState("")
 
   useEffect(() => {
-    // Get order ID from URL params, or generate one if not present
+    // Get order ID from URL params first (most reliable)
     const orderIdFromUrl = searchParams?.get("orderId")
+    
     if (orderIdFromUrl) {
+      // Order ID from URL - save it and use it
       setOrderNumber(orderIdFromUrl)
-      // Also save to localStorage for reference
       if (typeof window !== "undefined") {
         localStorage.setItem("lastOrderId", orderIdFromUrl)
+        // Also update URL to preserve it on refresh
+        const currentUrl = new URL(window.location.href)
+        if (!currentUrl.searchParams.has("orderId")) {
+          currentUrl.searchParams.set("orderId", orderIdFromUrl)
+          window.history.replaceState({}, "", currentUrl.toString())
+        }
       }
     } else {
-      // Fallback: try to get from localStorage or generate new
+      // No order ID in URL - try localStorage (for refresh scenarios)
       if (typeof window !== "undefined") {
         const lastOrderId = localStorage.getItem("lastOrderId")
         if (lastOrderId) {
+          // Restore order ID from localStorage and update URL
           setOrderNumber(lastOrderId)
+          const currentUrl = new URL(window.location.href)
+          currentUrl.searchParams.set("orderId", lastOrderId)
+          window.history.replaceState({}, "", currentUrl.toString())
         } else {
-          // Generate a fallback order number (shouldn't happen in normal flow)
-          const fallbackOrderId = "STW-" + new Date().toISOString().slice(0, 10).replace(/-/g, '') + "-" + Math.random().toString(36).substring(2, 8).toUpperCase()
-          setOrderNumber(fallbackOrderId)
+          // No order ID found - this shouldn't happen in normal flow
+          // Don't generate a new one, just show loading/error state
+          setOrderNumber("")
         }
       }
     }

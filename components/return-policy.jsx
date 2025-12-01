@@ -33,8 +33,8 @@ export default function ReturnPolicy() {
             <ul className="list-disc list-inside space-y-2">
               <li><strong>FAQs</strong> – Check out our frequently asked questions for quick answers.</li>
               <li><strong>Live Chat</strong> – Chat with our support team for real-time assistance.</li>
-              <li><strong>Email Support</strong> – Contact us at <a href="mailto:support@zenifyexpress.com" className="font-semibold text-gray-900">support@zenifyexpress.com</a> for any inquiries.</li>
-              <li><strong>Call Us</strong> – Reach out to us at <a href="tel:03108548943" className="font-semibold text-gray-900">0310-8548943</a> during business hours.</li>
+              <li><strong>Email Support</strong> – Contact us at <a href="mailto:support@styleways.pk" className="font-semibold text-gray-900">support@styleways.pk</a> for any inquiries.</li>
+              <li><strong>Call Us</strong> – Reach out to us at <a href="tel:03392351135" className="font-semibold text-gray-900">0339-2351135</a> during business hours.</li>
             </ul>
             <p className="mt-4">We’re committed to providing a smooth shopping experience. Let us know how we can help!</p>
           </section>

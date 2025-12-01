@@ -51,12 +51,12 @@ export default function ShippingPolicy() {
             <div className="mt-3 space-y-2 text-sm text-gray-700">
               <p className="flex items-center space-x-2">
                 <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.5 5L21 8m0 8H3a2 2 0 01-2-2V8a2 2 0 012-2h18a2 2 0 012 2v6a2 2 0 01-2 2z"></path></svg>
-                <span>Email: <a href="mailto:support@zenifyexpress.com" className="font-semibold text-gray-900">support@zenifyexpress.com</a></span>
+                <span>Email: <a href="mailto:support@styleways.pk" className="font-semibold text-gray-900">support@styleways.pk</a></span>
               </p>
 
               <p className="flex items-center space-x-2">
                 <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.86 19.86 0 01-3.07-8.63A2 2 0 014.08 2h3a2 2 0 012 1.72c.12 1.05.38 2.07.77 3.03a2 2 0 01-.45 2.11L8.09 10.91a16 16 0 006 6l1.05-1.05a2 2 0 012.11-.45c.96.39 1.98.65 3.03.77A2 2 0 0122 16.92z"></path></svg>
-                <span>Phone: <a href="tel:03108548943" className="font-semibold text-gray-900">0310-8548943</a></span>
+                <span>Phone: <a href="tel:03392351135" className="font-semibold text-gray-900">0339-2351135</a></span>
               </p>
             </div>
           </section>

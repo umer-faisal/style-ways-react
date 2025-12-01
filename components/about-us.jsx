@@ -67,7 +67,7 @@ export default function About() {
           <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop" alt="Fashion Collection" className="w-full h-32 object-cover rounded-md" />
           <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop" alt="Tech Gadgets" className="w-full h-32 object-cover rounded-md" />
           <img src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=400&h=300&fit=crop" alt="Home Essentials" className="w-full h-32 object-cover rounded-md" />
-          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=300&fit=crop" alt="StyleWays Products" className="w-full h-32 object-cover rounded-md" />
+          <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=870&auto=format&fit=crop" alt="StyleWays Products" className="w-full h-32 object-cover rounded-md" />
         </div>
       </div>
     </div>

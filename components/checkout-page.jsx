@@ -292,6 +292,11 @@ export default function CheckoutPage() {
 		// Generate unique order ID
 		const orderId = generateOrderId()
 
+		// Log order ID for admin/developer visibility
+		console.log("=".repeat(50))
+		console.log("📦 ORDER PLACED - ORDER ID:", orderId)
+		console.log("=".repeat(50))
+
 		const templateParams = {
 			orderId: orderId,
 			// firstName and lastName not in UI, so using default values
@@ -351,6 +356,11 @@ export default function CheckoutPage() {
 				publicKey
 			)
 
+			// Save order ID to localStorage before navigation (for refresh persistence)
+			if (typeof window !== "undefined") {
+				localStorage.setItem("lastOrderId", orderId)
+			}
+
 			// Clear checkout form data from localStorage after successful order
 			if (typeof window !== "undefined") {
 				localStorage.removeItem("checkout_shippingInfo")
@@ -360,7 +370,8 @@ export default function CheckoutPage() {
 			}
 
 			clearCart()
-			// navigate to the correct success page with order ID
+			// Navigate to success page with the same order ID that was sent in email
+			// This ensures email and screen show the exact same order ID
 			router.push(`/success?orderId=${orderId}`)
 		} catch (error) {
 			console.error("EmailJS error:", error)
