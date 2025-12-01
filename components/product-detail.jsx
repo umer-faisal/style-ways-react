@@ -8,12 +8,23 @@ import { Card, CardContent } from "./ui/card"
 import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Truck, Shield, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 
+// Helper to build slug: "<name>-<id>" (with name slugified)
+const createSlug = (name, id) => {
+  const nameSlug = String(name)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
+  return `${nameSlug}-${id}`
+}
+
 // Mock product data - in a real app this would come from an API
 const getProductById = (id) => {
   const products = [
     {
       id: "BlueDrop-Shoulder",
       name: "Blue Drop-Shoulder",
+      slug: createSlug("Blue Drop-Shoulder", "BlueDrop-Shoulder"),
       price: 1499,
       originalPrice: 1800,
       image: "/blue-dropshoulder/front.png",
@@ -40,6 +51,7 @@ const getProductById = (id) => {
     {
     id: "BeigeDrop-Shoulder",
     name: "Beige Drop-Shoulder",
+    slug: createSlug("Beige Drop-Shoulder", "BeigeDrop-Shoulder"),
     price: 1499,
     originalPrice: 1800,
     image: "/biege-dropshoulder/front.png",
@@ -64,6 +76,7 @@ const getProductById = (id) => {
   {
     id: "black-dropshoulder",
     name: "black-dropshoulder",
+    slug: createSlug("black-dropshoulder", "black-dropshoulder"),
     price: 79.99,
     originalPrice: 99.99,
     image: "/black-dropshoulder/front.png",
@@ -88,6 +101,7 @@ const getProductById = (id) => {
   {
     id: "WhiteDrop-Shoulder",
     name: "White Drop-Shoulder",
+    slug: createSlug("White Drop-Shoulder", "WhiteDrop-Shoulder"),
     price: 59.99,
     originalPrice: 79.99,
     image: "/white-dropshoulder/front.png",
@@ -112,6 +126,7 @@ const getProductById = (id) => {
   {
     id: "black-tee",
     name: "black-tee ",
+    slug: createSlug("black-tee", "black-tee"),
     price: "1250",
     originalPrice: 1499,
     image: "/black-tee/front.png",
@@ -138,9 +153,10 @@ const getProductById = (id) => {
   {
     id: "DavidBackhamPerfume",
     name: "David Backham Perfume",
+    slug: createSlug("David Backham Perfume", "DavidBackhamPerfume"),
     price: 2199,
     originalPrice: 2699,
-    image: "/david-backham/david-bekham-new.jpg",
+    image: "/david-backham/david-backham-new.jpg",
     rating: 4.5,
     reviews: 95,
     category: "Perfume",
@@ -170,6 +186,7 @@ const getProductById = (id) => {
   {
     id: "JananSportsPerfume",
     name: "Janan Sports Perfume",
+    slug: createSlug("Janan Sports Perfume", "JananSportsPerfume"),
     price: 2499,
     originalPrice: 2999,
     image: "/janan-sports/janan-sports-new.jpg",
@@ -203,6 +220,7 @@ const getProductById = (id) => {
   {
     id: 13,
     name: "Citrus Fresh Spray",
+    slug: createSlug("Citrus Fresh Spray", 13),
     price: 1999,
     originalPrice: 2499,
     images: ["/perfume-citrus.png", "/perfume-citrus-side.png"],
@@ -236,6 +254,7 @@ const getProductById = (id) => {
   {
     id: 14,
     name: "Lavender Fields",
+    slug: createSlug("Lavender Fields", 14),
     price: 2399,
     originalPrice: 2899,
     images: ["/perfume-lavender.png", "/perfume-lavender-side.png"],
@@ -268,7 +287,9 @@ const getProductById = (id) => {
   },
   ]
 
-  return products.find((p) => p.id === Number.parseInt(id)) || products[0]
+  // Match both string and numeric IDs safely so every product detail works
+  const normalizedId = String(id)
+  return products.find((p) => String(p.id) === normalizedId) || products[0]
 }
 
 export default function ProductDetail({ productId }) {

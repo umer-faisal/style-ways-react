@@ -10,10 +10,21 @@ import { Badge } from "../components/ui/badge"
 import { Star, ShoppingCart, Filter, Search } from "lucide-react"
 import Link from "next/link"
 
+// Helper to build slug: "<name>-<id>" (with name slugified)
+const createSlug = (name, id) => {
+  const nameSlug = String(name)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
+  return `${nameSlug}-${id}`
+}
+
 const allProducts = [
   {
     id: "BlueDrop-Shoulder",
     name: "Blue Drop-Shoulder ",
+    slug: createSlug("Blue Drop-Shoulder", "BlueDrop-Shoulder"),
     price: 1499,
     originalPrice: 1800,
     image: "/blue-dropshoulder/front.png",
@@ -26,6 +37,7 @@ const allProducts = [
   {
     id: "BeigeDrop-Shoulder",
     name: "Beige Drop-Shoulder",
+    slug: createSlug("Beige Drop-Shoulder", "BeigeDrop-Shoulder"),
     price: 1499,
     originalPrice: 1800,
     image: "/biege-dropshoulder/front.png",
@@ -38,6 +50,7 @@ const allProducts = [
   {
     id: "black-dropshoulder",
     name: "black-dropshoulder",
+    slug: createSlug("black-dropshoulder", "black-dropshoulder"),
     price: 79.99,
     originalPrice: 99.99,
     image: "/black-dropshoulder/front.png",
@@ -50,6 +63,7 @@ const allProducts = [
   {
       id: "WhiteDrop-Shoulder",
       name: "White Drop-Shoulder",
+      slug: createSlug("White Drop-Shoulder", "WhiteDrop-Shoulder"),
       price: 59.99,
       originalPrice: 79.99,
       image: "/white-dropshoulder/front.png",
@@ -75,6 +89,7 @@ const allProducts = [
   {
     id: "JananSportsPerfume",
     name: "Janan Sports Perfume",
+    slug: createSlug("Janan Sports Perfume", "JananSportsPerfume"),
     price: 2499,
     originalPrice: 2999,
     image: "/janan-sports/janan-sports-new.jpg",
@@ -88,6 +103,7 @@ const allProducts = [
   {
     id: "DavidBackhamPerfume",
     name: "David Backham Perfume",
+    slug: createSlug("David Backham Perfume", "DavidBackhamPerfume"),
     price: 2199,
     originalPrice: 2699,
     image: "/david-backham/david-backham-new.jpg",
@@ -239,7 +255,7 @@ export default function ProductCatalog() {
         {sortedProducts.map((product) => (
           <Card key={product.id} className="group hover:shadow-lg transition-shadow duration-300">
             <CardContent className="p-0">
-              <Link href={`/products/${product.id}`}>
+              <Link href={`/products/${product.slug || product.id}`}>
                 <div className="relative overflow-hidden rounded-t-lg cursor-pointer">
                   <img
                     src={product.image || "/placeholder.svg"}
@@ -262,7 +278,7 @@ export default function ProductCatalog() {
               </Link>
 
               <div className="p-4">
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                   <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors cursor-pointer">
                     {product.name}
                   </h3>
