@@ -75,12 +75,29 @@ export default function CheckoutPage() {
 		validate: (values) => {
 			const newErrors = {}
 			const required = ["firstName", "lastName", "email", "phone", "address", "city", "state", "zipCode"]
+			const minThreeChars = ["firstName", "lastName", "address", "city", "state", "zipCode","phone"]
 
 			required.forEach((field) => {
 				if (!values[field]) {
 					newErrors[field] = "This field is required"
 				}
 			})
+
+			// Minimum 3 character validation for text-like fields
+			minThreeChars.forEach((field) => {
+				const value = values[field]
+				if (value && String(value).trim().length < 3) {
+					newErrors[field] = "Must be at least 3 characters"
+				}
+			})
+
+			// Phone: minimum 9 digits (ignoring spaces / dashes)
+			if (values.phone) {
+				const digitsOnly = String(values.phone).replace(/\D/g, "")
+				if (digitsOnly.length < 11) {
+					newErrors.phone = "Phone number must be at least 11 digits"
+				}
+			}
 
 			if (values.email && !/\S+@\S+\.\S+/.test(values.email)) {
 				newErrors.email = "Please enter a valid email address"
