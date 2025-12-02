@@ -288,8 +288,20 @@ const getProductById = (id) => {
   ]
 
   // Match both string and numeric IDs safely so every product detail works
+  // Also try to match by slug if direct ID match fails
   const normalizedId = String(id)
-  return products.find((p) => String(p.id) === normalizedId) || products[0]
+  
+  // First try matching by slug (handles cases where slug is passed directly)
+  const productBySlug = products.find((p) => p.slug === normalizedId)
+  if (productBySlug) return productBySlug
+  
+  // Then try matching by ID
+  const productById = products.find((p) => String(p.id) === normalizedId)
+  if (productById) return productById
+  
+  // If still not found, return null instead of defaulting to first product
+  // This will help identify when a product is not found
+  return null
 }
 
 export default function ProductDetail({ productId }) {
@@ -299,6 +311,21 @@ export default function ProductDetail({ productId }) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
+  
+  // Handle case where product is not found
+  if (!product) {
+    return (
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center py-16">
+          <h1 className="text-2xl font-bold text-primary mb-4">Product Not Found</h1>
+          <p className="text-muted-foreground mb-6">The product you're looking for doesn't exist.</p>
+          <Link href="/products" className="text-primary hover:underline">
+            ← Back to Products
+          </Link>
+        </div>
+      </div>
+    )
+  }
   
   // Determine if this product is clothing (has sizes or name/category hint)
   const isClothing = Array.isArray(product.sizes) || /(tee|shirt|drop|shoulder|dress|pant|jeans|hoodie|apparel|clothe)/i.test(

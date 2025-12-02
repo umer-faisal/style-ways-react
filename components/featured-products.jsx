@@ -7,10 +7,21 @@ import { Star, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
+// Helper to build slug: "<name>-<id>" (with name slugified)
+const createSlug = (name, id) => {
+  const nameSlug = String(name)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
+  return `${nameSlug}-${id}`
+}
+
 const featuredProducts = [
   {
     id: "BlueDrop-Shoulder",
     name: "Blue Drop-Shoulder",
+    slug: createSlug("Blue Drop-Shoulder", "BlueDrop-Shoulder"),
     price: 1499,
     originalPrice: 1800,
     image: "/blue-dropshoulder/front.png",
@@ -20,6 +31,7 @@ const featuredProducts = [
   {
     id: "DavidBackhamPerfume",
     name: "David Backham Perfume",
+    slug: createSlug("David Backham Perfume", "DavidBackhamPerfume"),
     price: 2199,
     originalPrice: 2699,
     image: "/david-backham/david-backham-new.jpg",
@@ -29,6 +41,7 @@ const featuredProducts = [
   {
     id: "WhiteDrop-Shoulder",
     name: "White Drop-Shoulder",
+    slug: createSlug("White Drop-Shoulder", "WhiteDrop-Shoulder"),
     price: 59.99,
     originalPrice: 79.99,
     image: "/white-dropshoulder/front.png",
@@ -38,6 +51,7 @@ const featuredProducts = [
   {
     id: "JananSportsPerfume",
     name: "Janan Sports Perfume",
+    slug: createSlug("Janan Sports Perfume", "JananSportsPerfume"),
     price: 2499,
     originalPrice: 2999,
     image: "/janan-sports/janan-sports-new.jpg",
@@ -74,7 +88,7 @@ export default function FeaturedProducts() {
           {featuredProducts.map((product) => (
             <Card key={product.id} className="group hover:shadow-lg transition-shadow duration-300">
               <CardContent className="p-0">
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                   <div className="relative overflow-hidden rounded-t-lg cursor-pointer">
                     <img
                       src={product.image || "/placeholder.svg"}
@@ -88,7 +102,7 @@ export default function FeaturedProducts() {
                 </Link>
 
                 <div className="p-4">
-                  <Link href={`/products/${product.id}`}>
+                  <Link href={`/products/${product.slug || product.id}`}>
                     <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors cursor-pointer">
                       {product.name}
                     </h3>
